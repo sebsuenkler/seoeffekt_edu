@@ -1,0 +1,21 @@
+https://betterscientificsoftware.github.io/python-for-hpc/tutorials/python-pypi-packaging/#example-projects
+
+https://towardsdatascience.com/do-you-know-python-has-a-built-in-database-d553989c87bd
+
+https://pypi.org/project/sqlite-rx/
+
+https://medium.com/@fenneccharles/building-a-simple-form-with-python-input-35c58cad6b7a
+
+
+Einfache Formulare für das Anlegen von Studien
+
+Import von Suchanfragen aus CSV-Dateien
+
+Nur Google Scraper
+
+
+Export mit einfachem Formulare
+
+Status abfragen mit einfachem Formular
+
+https://www.python-kurs.eu/python3_eingabe.php
