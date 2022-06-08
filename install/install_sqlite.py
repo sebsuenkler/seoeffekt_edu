@@ -33,20 +33,6 @@ try:
 except:
     pass
 
-try:
-    with con:
-        con.execute("""
-            CREATE TABLE serp (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                query_id INTEGER,
-                result TEXT,
-                search_engine TEXT,
-                progress INTEGER,
-                date DATE
-            );
-        """)
-except:
-    pass
 
 try:
     with con:
@@ -68,12 +54,11 @@ except:
 try:
     with con:
         con.execute("""
-            CREATE TABLE result (
+            CREATE TABLE search_result (
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 study_id INTEGER,
                 query_id INTEGER,
                 scraper_id INTEGER,
-                import INTEGER,
                 ip TEXT,
                 hash TEXT,
                 main_hash TEXT,
@@ -81,7 +66,24 @@ try:
                 position INTEGER,
                 url TEXT,
                 main_url TEXT,
-                progress INTEGER,
+                timestamp TIMESTAMP,
+                date DATE
+            );
+        """)
+except:
+    pass
+
+try:
+    with con:
+        con.execute("""
+            CREATE TABLE imported_result (
+                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                study_id INTEGER,
+                ip TEXT,
+                hash TEXT,
+                main_hash TEXT,
+                url TEXT,
+                main_url TEXT,
                 timestamp TIMESTAMP,
                 date DATE
             );

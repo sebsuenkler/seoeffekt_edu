@@ -1,0 +1,23 @@
+{
+   "Google":{
+      "search_engine":"Google.com",
+      "search-box":"q",
+      "max_number_pages":100,
+      "search_url":"https://www.google.com/",
+      "xpath_results":"//div[@class='tF2Cxc']/div[@class='yuRUbf']/a/@href",
+      "max_results_filter":";filter=0",
+      "captcha":"g-recaptcha",
+      "cookies_button":"L2AGLb"
+   },
+   "Google_Top10":{
+      "search_engine":"Google.com_Top10",
+      "search-box":"q",
+      "max_number_pages":1,
+      "search_url":"https://www.google.com/",
+      "xpath_results":"//div[@class='tF2Cxc']/div[@class='yuRUbf']/a/@href",
+      "xpath_next_page":"//a[@aria-label='{}']",
+      "max_results_filter":";filter=0",
+      "captcha":"g-recaptcha",
+      "cookies_button":"L2AGLb"
+   }
+}
