@@ -31,10 +31,6 @@ def micros(hash, html_comments, html_source):
         obj = ms[0]
         pattern = ms[1]
 
-        for comment in html_comments:
-            if(len(comment) < 3000):
-                if Helpers.matchText(comment, pattern):
-                    micros_save.append([obj])
         for s in html_source:
             if(len(s) < 3000):
                 if Helpers.matchText(s, pattern):

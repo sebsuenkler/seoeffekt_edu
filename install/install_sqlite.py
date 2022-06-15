@@ -21,10 +21,10 @@ try:
         con.execute("""
             CREATE TABLE source (
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+                url TEXT,
                 hash TEXT,
                 source TEXT,
-                urls TEXT,
-                comments TEXT,
+                hyperlinks TEXT,
                 speed FLOAT,
                 progress INTEGER,
                 date DATE
