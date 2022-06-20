@@ -63,7 +63,7 @@ def identify_micros(source):
 
 def identify_og(source):
 
-    pattern = '*og:*'
+    pattern = '*meta*og:*'
     result = '0'
 
     if match_text(source, pattern):
@@ -83,7 +83,7 @@ def identify_viewport(source):
 
 def identify_sitemap(source):
 
-    pattern = "*sitemap*"
+    pattern = "*a*href*sitemap*"
     result = '0'
 
     if (match_text(source, pattern)):
