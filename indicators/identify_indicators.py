@@ -5,18 +5,76 @@ import json
 from lxml import html
 from bs4 import BeautifulSoup
 
+from save_source import save_robot_txt
+from save_source import calculate_loading_time
+
 def match_text(text, pattern):
     text = text.lower()
     pattern= pattern.lower()
     check = fnmatch.fnmatch(text, pattern)
     return check
 
+def is_valid_url(url):
+    try:
+        parsed = urlparse(url)
+        return bool(parsed.netloc) and bool(parsed.scheme)
+    except:
+        return False
+
 def get_scheme(url):
     parsed = urlparse(url)
     return parsed.scheme
 
+def get_netloc(url):
+    parsed = urlparse(url)
+    return parsed.netloc
+
+def get_plugins():
+
+    with open('config/evaluation.ini', 'r') as f:
+        array = json.load(f)
+
+    plugins_json = array["text-match"]
+    plugins = []
+
+    for get_plugin in plugins_json:
+        name = get_plugin
+        source = plugins_json[name]["source"]
+        with open(source, 'r') as csvfile:
+            csv_result = csv.reader(csvfile, delimiter=',', quotechar='"')
+            source = list(csv_result)
+        plugin = {
+        "name": name,
+        "source": source
+        }
+        plugins.append(plugin)
+
+    return plugins
+
+def get_sources():
+    with open('config/sources.ini', 'r') as f:
+        array = json.load(f)
+
+    sources_json = array["text-match"]
+    sources = []
+
+    for get_source in sources_json:
+        name = get_source
+        source = sources_json[name]["source"]
+        with open(source, 'r') as csvfile:
+            csv_result = csv.reader(csvfile, delimiter=',', quotechar='"')
+            source = list(csv_result)
+        load_url = {
+        "name": name,
+        "source": source
+        }
+        sources.append(load_url)
+
+    return sources
+
+
 def identify_url_length(url):
-    result = '-1'
+    result = -1
     url = url.replace("www.", "")
 
     if (match_text(url, "https://*")):
@@ -31,10 +89,10 @@ def identify_url_length(url):
 
 def identify_https(url):
     scheme = get_scheme(url)
-    result = '0'
+    result = 0
 
     if scheme == 'https':
-        result = '1'
+        result = 1
 
     return result
 
@@ -64,30 +122,30 @@ def identify_micros(source):
 def identify_og(source):
 
     pattern = '*meta*og:*'
-    result = '0'
+    result = 0
 
     if match_text(source, pattern):
-        result = '1'
+        result = 1
 
     return result
 
 def identify_viewport(source):
 
     pattern = '*meta*name*viewport*'
-    result = '0'
+    result = 0
 
     if match_text(source, pattern):
-        result = '1'
+        result = 1
 
     return result
 
 def identify_sitemap(source):
 
     pattern = "*a*href*sitemap*"
-    result = '0'
+    result = 0
 
     if (match_text(source, pattern)):
-        result = '1'
+        result = 1
 
     return result
 
@@ -98,12 +156,12 @@ def identify_wordpress(source):
     check = str(content)
     check = check.lower()
 
-    result = '0'
+    result = 0
 
     if len(check) > 1:
         pattern = "*wordpress*"
         if match_text(check, pattern):
-            result = '1'
+            result = 1
 
     return result
 
@@ -117,7 +175,7 @@ def identify_canonical(source):
     for hyperlink in hyperlinks:
         hyperlink_counter = hyperlink_counter + 1
 
-    return str(hyperlink_counter)
+    return hyperlink_counter
 
 def identify_nofollow(source):
     tree = html.fromstring(source)
@@ -137,7 +195,7 @@ def identify_nofollow(source):
         if hyperlink == 'nofollow':
             hyperlink_counter = hyperlink_counter + 1
 
-    return str(hyperlink_counter)
+    return hyperlink_counter
 
 def identify_h1(source):
     tree = html.fromstring(source)
@@ -148,7 +206,7 @@ def identify_h1(source):
     for r in res:
         counter = counter + 1
 
-    return str(counter)
+    return counter
 
 
 def identify_keywords_in_source(source, search_query):
@@ -173,7 +231,7 @@ def identify_keywords_in_source(source, search_query):
                 if kw.lower() in c.lower():
                     counter = counter + 1
 
-    return str(counter)
+    return counter
 
 
 def identify_keywords_in_url(url, search_query):
@@ -186,7 +244,7 @@ def identify_keywords_in_url(url, search_query):
             if kw.lower() in url.lower():
                 counter = counter + 1
 
-        return str(counter)
+        return counter
 
 
 def identify_keyword_density(source, search_query):
@@ -233,13 +291,13 @@ def identify_keyword_density(source, search_query):
         multiplier = 10 ** decimals
         kw_density = int(kw_density * multiplier) / multiplier
 
-        return str(kw_density)
+        return kw_density
 
 def identify_description(source):
 
     tree = html.fromstring(source)
 
-    result = '0'
+    result = 0
 
     xpath_meta = "//meta[@name='description']/@content"
     xpath_og_property = "//meta[@property='og:description']/@content"
@@ -252,13 +310,13 @@ def identify_description(source):
     site_description = str(tree.xpath(xpath_site_description))
 
     if(len(meta_content) > 5 or len(og_property_content) > 5 or len(og_name) > 5 or len(site_description) > 5):
-        result = '1'
+        result = 1
 
     return result
 
 def identify_title(source):
     tree = html.fromstring(source)
-    result = '0'
+    result = 0
     xpath_title = "//title/text()"
     xpath_meta_title = "//meta[@name='title']/@content"
     xpath_og_title = "//meta[@property='og:title']/@content"
@@ -270,6 +328,128 @@ def identify_title(source):
     site_title = str(tree.xpath(xpath_site_title))
 
     if len(check_title) > 2 or len(check_meta_title) > 2  or len(check_og_title) > 2 or len(site_title) > 2:
-        result = '1'
+        result = 1
 
     return result
+
+def identify_hyperlinks(hyperlinks, main):
+    link = ""
+    internal_links = 0
+    external_links = 0
+    i = 0
+    e = 0
+    link_list = list()
+
+    urls_split = hyperlinks.split("[url]")
+
+    for u in urls_split:
+
+        link_split = u.split("   ")
+        link = (link_split[-1])
+        link_list.append(link)
+    link_list.sort()
+
+    for href in link_list:
+        if is_valid_url(href):
+            if main in href:
+                internal_links = internal_links + 1
+            else:
+                external_links = external_links + 1
+
+    i = internal_links
+    e = external_links
+
+    hyper_links_counter = {'internal': i, 'external': e}
+
+    return hyper_links_counter
+
+def identify_plugins(source):
+
+    soup = BeautifulSoup(source, 'lxml')
+    source_split = soup.get_text().strip()
+    source_split = source_split.split('\n')
+    source_split = set(source_split)
+    source_split = list(source_split)
+
+    plugins = get_plugins()
+    found_plugins = {}
+
+    for plugin in plugins:
+        plugin_type = plugin['name']
+        plugin_list = plugin['source']
+        plugin_names = []
+
+        for get_plugin in plugin_list:
+            plugin_name = get_plugin[0]
+            plugin_search_pattern = get_plugin[1]
+
+            for section in source_split:
+                if match_text(section, plugin_search_pattern):
+                    plugin_names.append(plugin_name)
+
+            update = {plugin_type:plugin_names}
+            found_plugins.update(update)
+
+    return found_plugins
+
+def identify_sources(main):
+    sources = get_sources()
+    found_urls = {}
+
+    main = main.replace('www.', '')
+
+    for source in sources:
+        source_type = source['name']
+        source_list = source['source']
+        source_urls = []
+
+        for get_source in source_list:
+            source_url = get_source[0]
+            if get_netloc(source_url):
+                source_url = get_netloc(source_url)
+            source_url = source_url.replace('www.', '')
+
+            if source_url in main:
+                source_urls.append(source_url)
+
+            update = {source_type:source_urls}
+            found_urls.update(update)
+
+    return found_urls
+
+def identify_robots_txt(main):
+    robots_url = main+'robots.txt'
+    result = 0
+
+    try:
+        source = save_robot_txt(robots_url)
+        source = source.decode("utf-8")
+        source = source.lower()
+
+        pattern = "*crawl-delay*"
+        if match_text(source, pattern):
+            result = 1
+
+        pattern = "*user agent*"
+        if match_text(source, pattern):
+            result = 1
+
+        pattern = "*sitemap*"
+        if match_text(source, pattern):
+            result = 1
+
+        pattern = "*noindex*"
+        if match_text(source, pattern):
+            result = 1
+
+        pattern = "*seo*"
+        if match_text(source, pattern):
+            result = 1
+
+    except:
+        result = -1
+
+    return result
+
+def identify_loading_time(url):
+    return calculate_loading_time(url)

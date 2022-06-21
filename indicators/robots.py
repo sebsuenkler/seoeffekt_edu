@@ -26,7 +26,7 @@ def robots(hash, result_main, main_hash):
 
         try:
             source = Results.saveResult(robots_url)
-            s = source.lower()
+            source = source.decode("utf-8") 
 
             #print(s)
 

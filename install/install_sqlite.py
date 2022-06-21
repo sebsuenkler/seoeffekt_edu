@@ -24,8 +24,6 @@ try:
                 url TEXT,
                 hash TEXT,
                 source TEXT,
-                hyperlinks TEXT,
-                speed FLOAT,
                 progress INTEGER,
                 date DATE
             );
