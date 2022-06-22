@@ -28,19 +28,19 @@ print("\n")
 origin_results = input("Do you want to scrape search results (y/n)?: ")
 
 print("\n")
-
-while not search_engines:
-    for search_engine in search_engines_json:
-        se_choice = ""
-        while se_choice.lower() != "y" or se_choice.lower() != "n":
-            se_choice = input("Do you want to include {} (y/n)?: ".format(search_engine))
-            if se_choice.lower() == "y":
-                search_engines.append(search_engine)
-                break;
-            elif se_choice.lower() == "n":
-                break;
-            else:
-                pass
+if origin_results == "y":
+    while not search_engines:
+        for search_engine in search_engines_json:
+            se_choice = ""
+            while se_choice.lower() != "y" or se_choice.lower() != "n":
+                se_choice = input("Do you want to include {} (y/n)?: ".format(search_engine))
+                if se_choice.lower() == "y":
+                    search_engines.append(search_engine)
+                    break;
+                elif se_choice.lower() == "n":
+                    break;
+                else:
+                    pass
 
 print("\n")
 
@@ -59,7 +59,7 @@ cursor=connection.cursor()
 
 dup_name = False
 
-search_engines = "Google.com_Top10"
+
 
 with connection:
     data = cursor.execute("SELECT name FROM STUDY WHERE name =?", (name,))
@@ -67,8 +67,8 @@ with connection:
         dup_name = row
 
 if not dup_name:
-    sql = 'INSERT INTO STUDY(name, description, search_engines, date) values(?,?,?,?)'
-    data = (name, description, "", today)
+    sql = 'INSERT INTO STUDY(name, description, date) values(?,?,?)'
+    data = (name, description, today)
 
     with connection:
         cursor.execute(sql, data)
@@ -89,8 +89,17 @@ if not dup_name:
 
                 with connection:
                     cursor.execute(sql, data)
+                    query_id = cursor.lastrowid
+                    progress = 0
+                    for search_engine in search_engines:
+                        sql = 'INSERT INTO scraper(study_id, query_id, query, search_engine, progress, date) values(?,?,?,?,?,?)'
+                        data = (study_id, query_id, query, search_engine, progress, today)
+                        cursor.execute(sql, data)
+
             else:
                 print("Query already exists (skip)")
+
+
 
 else:
     print("Study with the same name already exists")
