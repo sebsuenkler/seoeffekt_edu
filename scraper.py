@@ -18,6 +18,9 @@ from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.firefox.options import Options
 import time
 
+from lxml import html
+from bs4 import BeautifulSoup
+
 import json
 
 with open('scraper.json') as json_file:
@@ -43,8 +46,12 @@ if os.name == "nt":
 else:
     extension_path = current_path+"/i_dont_care_about_cookies-3.4.0.xpi"
 
+def get_search_results(driver):
+    search_results = driver.find_elements(By.XPATH, xpath_results)
+    return search_results
+
 options = Options()
-options.headless = False
+options.headless = True
 
 driver = webdriver.Firefox(options=options)
 driver.install_addon(extension_path, temporary=False)
@@ -55,22 +62,33 @@ search.send_keys(query)
 search.send_keys(Keys.RETURN)
 time.sleep(3)
 
-init_page = 2
+#get_search_results(driver)
+source = driver.page_source
+tree = html.fromstring(source)
+urls = tree.xpath(xpath_results)
+print(urls)
 
-x = range(init_page, init_page+max_number_pages)
 
-for n in x:
-    r = str(n)
-    page = 'Page '+r
-    pages.append(page)
 
-for p in pages:
 
-    paging = driver.find_element(By.XPATH, xpath_next_page.format(p))
-
-    paging.click()
-
-    time.sleep(3)
+# init_page = 2
+#
+# x = range(init_page, init_page+max_number_pages)
+#
+#
+#
+# for n in x:
+#     r = str(n)
+#     page = 'Page '+r
+#     pages.append(page)
+#
+# for p in pages:
+#
+#     paging = driver.find_element(By.XPATH, xpath_next_page.format(p))
+#
+#     paging.click()
+#
+#     time.sleep(3)
 
 
 driver.quit()
