@@ -97,7 +97,7 @@ def identify_https(url):
     return result
 
 def identify_micros(source):
-    
+
     micros_list = []
     with open('lists/micro.csv', 'r') as csvfile:
         micros = csv.reader(csvfile)
@@ -296,6 +296,8 @@ def identify_keyword_density(source, search_query):
 
 def identify_description(source):
 
+    source = source.lower()
+
     tree = html.fromstring(source)
 
     result = 0
@@ -316,6 +318,7 @@ def identify_description(source):
     return result
 
 def identify_title(source):
+    source = source.lower()
     tree = html.fromstring(source)
     result = 0
     xpath_title = "//title/text()"

@@ -1,91 +1,252 @@
-from get_indicators import get_indicators
-query = "stahlschlag"
-hash = "1"
-indicators = get_indicators(hash, query)
+import base64
+from datetime import date
 
-#translate the dictionary into variables
-url_length = indicators['url_length']
-https = indicators['https']
-micros = len(indicators['micros'])
-og = indicators['og']
-viewport = indicators['viewport']
-sitemap = indicators['sitemap']
-wordpress = indicators['wordpress']
-canonical = indicators['canonical']
-nofollow = indicators['nofollow']
-h1 = indicators['h1']
 
-keywords_in_source = indicators['keywords_in_source']
-keywords_in_url = indicators['keywords_in_url']
-keyword_density = indicators['keyword_density']
+today = date.today()
 
-description = indicators['description']
-title = indicators['title']
+from urllib.parse import urlsplit
+from urllib.parse import urlparse
+import socket
 
-internal_links = indicators['hyperlinks']['internal']
-external_links = indicators['hyperlinks']['external']
+from lxml import html
+from bs4 import BeautifulSoup
+import fnmatch
 
-tools_analytics = len(indicators['plugins']['tools analytics'])
-tools_seo = len(indicators['plugins']['tools seo'])
-tools_caching = len(indicators['plugins']['tools caching'])
-tools_social = len(indicators['plugins']['tools social'])
-tools_ads = len(indicators['plugins']['tools ads'])
+from lib.identify_indicators import *
 
-sources_ads = len(indicators['sources']['ads'])
-sources_company = len(indicators['sources']['company'])
-sources_customers = len(indicators['sources']['seo_customers'])
-sources_news = len(indicators['sources']['news'])
-sources_not_optimized = len(indicators['sources']['not_optimized'])
-sources_services = len(indicators['sources']['search_engine_services'])
-sources_shops = len(indicators['sources']['shops'])
+import sqlite3 as sl
 
-robots_txt = indicators['robots_txt']
-loading_time = indicators['loading_time']
+connection = sl.connect('seo_effect.db')
 
-#classify the result
-not_optimized = 0
-optimized = 0
-probably_optimized = 0
-probably_not_optimized = 0
-classification_result = "uncertain"
+cursor=connection.cursor()
 
-if sources_not_optimized > 0:
-    not_optimized = 1
-    classification_result = 'most_probably_not_optimized'
+def classify_result(source, url, query, result_id):
 
-#most probably optimized
-if not_optimized == 0 and (tools_seo > 0 or sources_customers > 0 or sources_news > 0 or sources_ads > 0 or micros > 0):
-    optimized = 1
-    classification_result = 'most_probably_optimized'
+    def match_text(text, pattern):
+        text = text.lower()
+        pattern= pattern.lower()
+        check = fnmatch.fnmatch(text, pattern)
+        return check
 
-#probably optimized
-if optimized == 0 and not_optimized == 0 and (tools_analytics > 0 or sources_shops > 0 or sources_company > 0 or viewport == 1 or robots_txt == 1 or sitemap == 1 or nofollow > 0 or canonical > 0 or (loading_time < 3 and loading_time > 0)):
-    probably_optimized = 1
-    classification_result = 'probably_optimized'
+    def check_progress_classification():
+        dup = False
 
-#probably_not_optimized
-if title == 0 or description == 0 or loading_time > 30:
-    classification_result = 'probably_not_optimized'
+        with connection:
+            data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? LIMIT 1",(result_id,))
+            for row in data:
+                dup = row
+        if not dup:
+            return True
+        else:
+            return False
 
-for key, value in indicators.items():
-    if type(value) is int or type(value) is float:
-        value = str(value)
-    if type(value) is list:
-        print(key)
-        values = "0"
-        if value:
-            for v in value:
-                values = ""
-                if v:
-                    values = values + v + ";"
+    if check_progress_classification():
 
-        print(values)
-    if type(value) is dict:
-        for k, v in value.items():
-            key = k
-            if v:
-                value = str(v)
+
+
+        def get_meta(url):
+            meta = []
+            try:
+                parsed_uri = urlparse(url)
+                hostname = '{uri.netloc}'.format(uri=parsed_uri)
+                ip = socket.gethostbyname(hostname)
+            except:
+                ip = "-1"
+
+            main = '{0.scheme}://{0.netloc}/'.format(urlsplit(url))
+            meta = [ip, main]
+            return meta
+
+        meta = get_meta(url)
+
+
+
+        def get_hyperlinks(source, main = meta[1]):
+            hyperlinks = ""
+
+            if (source !="error"):
+                #extract all comments in source code
+                soup = BeautifulSoup(source, 'lxml')
+
+                soup_urls = []
+                tags = soup.find_all('a')
+
+                for tag in tags:
+                    hyperlink_text = str(tag.string).strip()
+                    href = str(tag.get('href')).strip()
+                    if "http" not in href:
+                        href = href.lstrip('/')
+                        href = main+href
+
+                    hyperlink = "[url]"+hyperlink_text+"   "+href
+                    if not match_text(hyperlink, '*mailto:*'):
+                        if hyperlink and hyperlink != " ":
+                            hyperlinks = hyperlinks+hyperlink
+
+                return hyperlinks
+
+        hyperlinks = get_hyperlinks(source)
+
+        indicators = {}
+
+
+
+        indicators['url_length'] = identify_url_length(url)
+        indicators['https'] = identify_https(url)
+
+        indicators['micros'] = identify_micros(source)
+        indicators['og'] = identify_og(source)
+        indicators['viewport'] = identify_viewport(source)
+        indicators['sitemap'] = identify_sitemap(source)
+        indicators['wordpress'] = identify_wordpress(source)
+        indicators['canonical'] = identify_canonical(source)
+        indicators['nofollow'] = identify_nofollow(source)
+        indicators['h1'] = identify_h1(source)
+
+        indicators['keywords_in_source'] = -1
+        indicators['keywords_in_url'] = -1
+        indicators['keyword_density'] = -1
+
+        if query:
+            indicators['keywords_in_source'] = identify_keywords_in_source(source, query)
+            indicators['keywords_in_url'] = identify_keywords_in_url(url, query)
+            indicators['keyword_density'] = identify_keyword_density(source, query)
+
+        indicators['description'] = identify_description(source)
+        indicators['title'] = identify_title(source)
+
+        indicators['hyperlinks'] = identify_hyperlinks(hyperlinks, meta[1])
+
+        indicators['plugins'] = identify_plugins(source)
+
+        indicators['sources'] = identify_sources(meta[1])
+
+        indicators['robots_txt'] = identify_robots_txt(meta[1])
+
+        indicators['loading_time'] = identify_loading_time(url)
+
+        def check_insert_result_dup(module):
+            dup = False
+            with connection:
+                data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? AND module = ?",(result_id, module,))
+                for row in data:
+                    dup = row
+            if not dup:
+                return True
             else:
-                value = '0'
-            print(key)
-            print(value)
+                return False
+
+        def insert_results(module, insert_result):
+            sql = 'INSERT INTO EVALUATION(result_id, module, value, date) values(?,?,?,?)'
+            data = (result_id, module, insert_result, today)
+            cursor.execute(sql, data)
+            connection.commit()
+
+        for key, value in indicators.items():
+
+            if type(value) != list and type(value) is not dict:
+                module = key
+                insert_result = str(value)
+
+                if check_insert_result_dup(module):
+                    insert_results(module, insert_result)
+            else:
+                if (type(value) is list):
+                    module = key
+                    insert_result = ", ".join(value)
+
+                    if check_insert_result_dup(module):
+                        insert_results(module, insert_result)
+
+                if (type(value) is dict):
+                    for k, v in value.items():
+                        module = k
+                        insert_result = v
+                        if (type(v) is list):
+                            insert_result = ", ".join(v)
+                        else:
+                            insert_result = str(v)
+
+                        if check_insert_result_dup(module):
+                            insert_results(module, insert_result)
+
+
+
+        #translate the dictionary into variables
+        url_length = indicators['url_length']
+        https = indicators['https']
+        micros = len(indicators['micros'])
+        og = indicators['og']
+        viewport = indicators['viewport']
+        sitemap = indicators['sitemap']
+        wordpress = indicators['wordpress']
+        canonical = indicators['canonical']
+        nofollow = indicators['nofollow']
+        h1 = indicators['h1']
+
+        keywords_in_source = indicators['keywords_in_source']
+        keywords_in_url = indicators['keywords_in_url']
+        keyword_density = indicators['keyword_density']
+
+        description = indicators['description']
+        title = indicators['title']
+
+        internal_links = indicators['hyperlinks']['internal']
+        external_links = indicators['hyperlinks']['external']
+
+        tools_analytics = len(indicators['plugins']['tools analytics'])
+        tools_seo = len(indicators['plugins']['tools seo'])
+        tools_caching = len(indicators['plugins']['tools caching'])
+        tools_social = len(indicators['plugins']['tools social'])
+        tools_ads = len(indicators['plugins']['tools ads'])
+
+        sources_ads = len(indicators['sources']['ads'])
+        sources_company = len(indicators['sources']['company'])
+        sources_customers = len(indicators['sources']['seo_customers'])
+        sources_news = len(indicators['sources']['news'])
+        sources_not_optimized = len(indicators['sources']['not_optimized'])
+        sources_services = len(indicators['sources']['search_engine_services'])
+        sources_shops = len(indicators['sources']['shops'])
+
+        robots_txt = indicators['robots_txt']
+        loading_time = indicators['loading_time']
+
+        #classify the result
+        optimized = 0
+        probably_optimized = 0
+        probably_not_optimized = 0
+        classification_result = "uncertain"
+
+        #most probably optimized
+        if tools_seo > 0 or sources_customers > 0 or sources_news > 0 or sources_ads > 0 or micros > 0:
+            optimized = 1
+            classification_result = 'most_probably_optimized'
+
+        #probably optimized
+        if optimized == 0 and (tools_analytics > 0 or sources_shops > 0 or sources_company > 0 or viewport == 1 or robots_txt == 1 or sitemap == 1 or nofollow > 0 or canonical > 0 or (loading_time < 3 and loading_time > 0)):
+            probably_optimized = 1
+            classification_result = 'probably_optimized'
+
+        #probably_not_optimized
+        if title == 0 or description == 0 or loading_time > 30:
+            classification_result = 'probably_not_optimized'
+
+        if sources_not_optimized > 0:
+            classification_result = 'most_probably_not_optimized'
+
+        sql = 'INSERT INTO CLASSIFICATION(result_id, classification, value, date) values(?,?,?,?)'
+        data = (result_id, 'rule_based', classification_result, today)
+        cursor.execute(sql, data)
+        connection.commit()
+
+
+with connection:
+    cursor_sources=connection.cursor()
+    source_results = cursor_sources.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
+
+    for s in source_results:
+        source = str(base64.b64decode(s[0]))
+        url = s[1]
+        query = s[2]
+        result_id = s[3]
+        classify_result(source, url, query, result_id)

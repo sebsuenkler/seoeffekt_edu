@@ -9,7 +9,7 @@ cursor=connection.cursor()
 urls = []
 
 with connection:
-    data = cursor.execute("SELECT SOURCE.id, SOURCE.result_id, SEARCH_RESULT.url FROM SOURCE,SEARCH_RESULT WHERE SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.PROGRESS=? ORDER BY RANDOM() LIMIT 1", (0,))
+    data = cursor.execute("SELECT SOURCE.id, SOURCE.result_id, SEARCH_RESULT.url FROM SOURCE,SEARCH_RESULT WHERE SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.PROGRESS=? ORDER BY RANDOM() LIMIT 5", (0,))
     for row in data:
         source_id = row[0]
         result_id = row[1]
