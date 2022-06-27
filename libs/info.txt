@@ -1,7 +1,0 @@
-functions and classes for the software
-evaluations.py = functions for the evaluations table in the database to process seo indicators
-helpers.py = library with functions to support repeating tasks
-queries.py = functions for the queries table
-results.py = functions for the results table
-scrapers.py = functions for the scrapers table and for the scraping app
-studies.py = functions for the studies table

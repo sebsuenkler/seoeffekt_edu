@@ -1,5 +1,5 @@
 {
-   "Google":{
+   "Google.com":{
       "search_engine":"Google.com",
       "search-box":"q",
       "max_number_pages":100,
@@ -9,8 +9,8 @@
       "max_results_filter":";filter=0",
       "captcha":"g-recaptcha"
    },
-   "Google_Top10":{
-      "search_engine":"Google.com_Top10",
+   "Google.com_Example":{
+      "search_engine":"Google.com_Example",
       "search-box":"q",
       "max_number_pages":1,
       "xpath_next_page":"//a[@aria-label='{}']",

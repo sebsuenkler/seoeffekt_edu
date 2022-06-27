@@ -8,6 +8,8 @@ import time
 import os
 current_path = os.path.abspath(os.getcwd())
 
+import base64
+
 if os.name == "nt":
     extension_path = current_path+"\i_dont_care_about_cookies-3.4.0.xpi"
 
@@ -32,8 +34,8 @@ def save_source(url):
     if type(source) != "str":
         source = source.encode('utf-8')
 
-    with open('source_test.txt', 'w+') as f:
-        f.write(str(source))
+    if source !="error":
+        source = base64.b64encode(source)
 
     return source
 

@@ -5,8 +5,8 @@ import json
 from lxml import html
 from bs4 import BeautifulSoup
 
-from save_source import save_robot_txt
-from save_source import calculate_loading_time
+from lib.sources import save_robot_txt
+from lib.sources import calculate_loading_time
 
 def match_text(text, pattern):
     text = text.lower()
@@ -97,6 +97,7 @@ def identify_https(url):
     return result
 
 def identify_micros(source):
+    
     micros_list = []
     with open('lists/micro.csv', 'r') as csvfile:
         micros = csv.reader(csvfile)

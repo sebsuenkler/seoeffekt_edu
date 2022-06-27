@@ -9,7 +9,6 @@ try:
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 name TEXT,
                 description TEXT,
-                search_engines TEXT,
                 date DATE
             );
         """)
@@ -54,7 +53,6 @@ try:
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 study_id INTEGER,
                 query_id INTEGER,
-                result_id INTEGER,
                 scraper_id INTEGER,
                 ip TEXT,
                 search_engine TEXT,
@@ -68,22 +66,6 @@ try:
 except:
     pass
 
-try:
-    with con:
-        con.execute("""
-            CREATE TABLE imported_result (
-                id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-                study_id INTEGER,
-                result_id INTEGER,
-                ip TEXT,
-                url TEXT,
-                main_url TEXT,
-                timestamp TIMESTAMP,
-                date DATE
-            );
-        """)
-except:
-    pass
 
 try:
     with con:

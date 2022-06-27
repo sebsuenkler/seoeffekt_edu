@@ -59,8 +59,6 @@ cursor=connection.cursor()
 
 dup_name = False
 
-
-
 with connection:
     data = cursor.execute("SELECT name FROM STUDY WHERE name =?", (name,))
     for row in data:
