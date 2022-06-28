@@ -16,9 +16,15 @@ from lib.identify_indicators import *
 
 import sqlite3 as sl
 
-connection = sl.connect('seo_effect.db')
+def connect_to_db():
+    connection = sl.connect('seo_effect.db', timeout=10, isolation_level=None)
+    connection.execute('pragma journal_mode=wal')
+    return connection
 
-cursor=connection.cursor()
+def close_connection_to_db(connection):
+    connection.close()
+
+
 
 def classify_result(source, url, query, result_id):
 
@@ -29,19 +35,21 @@ def classify_result(source, url, query, result_id):
         return check
 
     def check_progress_classification():
+        connection = connect_to_db()
+        cursor = connection.cursor()
         dup = False
-
-        with connection:
-            data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? LIMIT 1",(result_id,))
-            for row in data:
-                dup = row
+        data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? LIMIT 1",(result_id,))
+        connection.commit()
+        for row in data:
+            dup = row
+        close_connection_to_db(connection)
         if not dup:
             return True
         else:
             return False
 
-    if check_progress_classification():
 
+    if check_progress_classification():
 
 
         def get_meta(url):
@@ -64,7 +72,7 @@ def classify_result(source, url, query, result_id):
         def get_hyperlinks(source, main = meta[1]):
             hyperlinks = ""
 
-            if (source !="error"):
+            if source !="error":
                 #extract all comments in source code
                 soup = BeautifulSoup(source, 'lxml')
 
@@ -126,21 +134,29 @@ def classify_result(source, url, query, result_id):
         indicators['loading_time'] = identify_loading_time(url)
 
         def check_insert_result_dup(module):
+            connection = connect_to_db()
+            cursor = connection.cursor()
             dup = False
-            with connection:
-                data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? AND module = ?",(result_id, module,))
-                for row in data:
-                    dup = row
+            data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? AND module = ?",(result_id, module,))
+            connection.commit()
+            for row in data:
+                dup = row
+            close_connection_to_db(connection)
             if not dup:
                 return True
             else:
                 return False
 
+
         def insert_results(module, insert_result):
+            connection = connect_to_db()
+            cursor = connection.cursor()
             sql = 'INSERT INTO EVALUATION(result_id, module, value, date) values(?,?,?,?)'
             data = (result_id, module, insert_result, today)
             cursor.execute(sql, data)
             connection.commit()
+            close_connection_to_db(connection)
+
 
         for key, value in indicators.items():
 
@@ -234,19 +250,30 @@ def classify_result(source, url, query, result_id):
         if sources_not_optimized > 0:
             classification_result = 'most_probably_not_optimized'
 
+        if source == "error":
+            classify_result = "error"
+
+        connection = connect_to_db()
+        cursor = connection.cursor()
         sql = 'INSERT INTO CLASSIFICATION(result_id, classification, value, date) values(?,?,?,?)'
         data = (result_id, 'rule_based', classification_result, today)
         cursor.execute(sql, data)
         connection.commit()
+        close_connection_to_db(connection)
 
 
-with connection:
-    cursor_sources=connection.cursor()
-    source_results = cursor_sources.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
 
-    for s in source_results:
+connection = connect_to_db()
+cursor = connection.cursor()
+source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
+connection.commit()
+
+for s in source_results:
+    source = s[0]
+    if source != "error":
         source = str(base64.b64decode(s[0]))
-        url = s[1]
-        query = s[2]
-        result_id = s[3]
-        classify_result(source, url, query, result_id)
+    url = s[1]
+    query = s[2]
+    result_id = s[3]
+    classify_result(source, url, query, result_id)
+close_connection_to_db(connection)

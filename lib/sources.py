@@ -20,6 +20,7 @@ def save_source(url):
 
     driver = webdriver.Firefox(options=options)
     driver.install_addon(extension_path, temporary=False)
+    driver.set_page_load_timeout(120)
     try:
         driver.get(url)
         time.sleep(10)
@@ -28,6 +29,7 @@ def save_source(url):
         source = driver.page_source
     except:
         source = "error"
+        print(url)
 
     driver.quit()
 
@@ -42,6 +44,7 @@ def save_source(url):
 def save_robot_txt(url):
 
     driver = webdriver.Firefox(options=options)
+    driver.set_page_load_timeout(120)
     try:
         driver.get(url)
         time.sleep(2)
@@ -59,6 +62,7 @@ def save_robot_txt(url):
 def calculate_loading_time(url):
     driver = webdriver.Firefox(options=options)
     driver.install_addon(extension_path, temporary=False)
+    driver.set_page_load_timeout(120)
     loading_time = -1
 
     try:

@@ -4,6 +4,14 @@ from datetime import date
 
 import sqlite3 as sl
 
+
+def connect_to_db():
+    connection = sl.connect('seo_effect.db', timeout=10)
+    return connection
+
+def close_connection_to_db(connection):
+    connection.close()
+
 today = date.today()
 
 search_engines = []
@@ -53,47 +61,60 @@ print("\n")
 if not queries:
     queries = "queries.csv"
 
-connection = sl.connect('seo_effect.db')
-
-cursor=connection.cursor()
 
 dup_name = False
 
-with connection:
-    data = cursor.execute("SELECT name FROM STUDY WHERE name =?", (name,))
-    for row in data:
-        dup_name = row
+connection = connect_to_db()
+cursor = connection.cursor()
+data = cursor.execute("SELECT name FROM STUDY WHERE name =?", (name,))
+connection.commit()
+for row in data:
+    dup_name = row
+close_connection_to_db(connection)
 
 if not dup_name:
+    connection = connect_to_db()
+    cursor = connection.cursor()
     sql = 'INSERT INTO STUDY(name, description, date) values(?,?,?)'
     data = (name, description, today)
 
-    with connection:
-        cursor.execute(sql, data)
-        study_id = cursor.lastrowid
+    cursor.execute(sql, data)
+    connection.commit()
+    study_id = cursor.lastrowid
+    close_connection_to_db(connection)
 
     with open(queries) as csv_file:
         csv_reader = csv.reader(csv_file)
         for row in csv_reader:
             dup_query = False
             query = row[0]
+            connection = connect_to_db()
+            cursor = connection.cursor()
             data = cursor.execute("SELECT query FROM query WHERE query =? and study_id =?", (query,study_id,))
+            connection.commit()
             for row in data:
                 dup_query = row
+            close_connection_to_db(connection)
 
             if not dup_query:
+                connection = connect_to_db()
+                cursor = connection.cursor()
                 sql = 'INSERT INTO query(study_id, query, date) values(?,?,?)'
                 data = (study_id, query, today)
+                cursor.execute(sql, data)
+                connection.commit()
+                query_id = cursor.lastrowid
+                progress = 0
+                close_connection_to_db(connection)
 
-                with connection:
+                for search_engine in search_engines:
+                    connection = connect_to_db()
+                    cursor = connection.cursor()
+                    sql = 'INSERT INTO scraper(study_id, query_id, query, search_engine, progress, date) values(?,?,?,?,?,?)'
+                    data = (study_id, query_id, query, search_engine, progress, today)
                     cursor.execute(sql, data)
-                    query_id = cursor.lastrowid
-                    progress = 0
-                    for search_engine in search_engines:
-                        sql = 'INSERT INTO scraper(study_id, query_id, query, search_engine, progress, date) values(?,?,?,?,?,?)'
-                        data = (study_id, query_id, query, search_engine, progress, today)
-                        cursor.execute(sql, data)
-
+                    connection.commit()
+                    close_connection_to_db(connection)
             else:
                 print("Query already exists (skip)")
 
