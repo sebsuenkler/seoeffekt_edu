@@ -124,7 +124,7 @@ if reset_id == 0:
 
 
         options = Options()
-        options.headless = False
+        options.headless = True
 
         driver = webdriver.Firefox(options=options)
         driver.install_addon(extension_path, temporary=False)
@@ -140,7 +140,7 @@ if reset_id == 0:
 
             urls = get_search_results(driver)
 
-            print(urls)
+
 
             search_results.append(urls)
 
@@ -169,7 +169,7 @@ if reset_id == 0:
 
                     urls = get_search_results(driver)
 
-                    print(urls)
+
 
                     search_results.append(urls)
 
@@ -190,7 +190,7 @@ if reset_id == 0:
             timestamp = datetime.datetime.now()
             timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
 
-            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" failed [CAPTCHA]")
+            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" Query:"+str(query)+" failed [CAPTCHA]")
 
         else:
             connection = connect_to_db()
@@ -202,7 +202,7 @@ if reset_id == 0:
             timestamp = datetime.datetime.now()
             timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
 
-            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" success")
+            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" Query:"+str(query)+" success")
 
 
             import datetime

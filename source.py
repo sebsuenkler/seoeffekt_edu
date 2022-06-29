@@ -55,7 +55,7 @@ for v in urls:
     connection.commit()
     close_connection_to_db(connection)
 
-    imestamp = datetime.datetime.now()
+    timestamp = datetime.datetime.now()
     timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
 
     write_to_log(timestamp, "Save Source "+str(url))

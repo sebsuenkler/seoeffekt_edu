@@ -166,6 +166,20 @@ def classify_result(source, url, query, result_id):
                 connection.commit()
                 close_connection_to_db(connection)
 
+            def check_classification_dup():
+                connection = connect_to_db()
+                cursor = connection.cursor()
+                dup = False
+                data = cursor.execute("SELECT result_id FROM CLASSIFICATION WHERE result_id = ?",(result_id,))
+                connection.commit()
+                for row in data:
+                    dup = row
+                close_connection_to_db(connection)
+                if not dup:
+                    return True
+                else:
+                    return False
+
 
             for key, value in indicators.items():
 
@@ -262,14 +276,14 @@ def classify_result(source, url, query, result_id):
         if source == "error":
             classification_result = "error"
 
-        connection = connect_to_db()
-        cursor = connection.cursor()
-        sql = 'INSERT INTO CLASSIFICATION(result_id, classification, value, date) values(?,?,?,?)'
-        data = (result_id, 'rule_based', classification_result, today)
-        cursor.execute(sql, data)
-        connection.commit()
-        close_connection_to_db(connection)
-
+        if check_classification_dup():
+            connection = connect_to_db()
+            cursor = connection.cursor()
+            sql = 'INSERT INTO CLASSIFICATION(result_id, classification, value, date) values(?,?,?,?)'
+            data = (result_id, 'rule_based', classification_result, today)
+            cursor.execute(sql, data)
+            connection.commit()
+            close_connection_to_db(connection)
 
 
 connection = connect_to_db()

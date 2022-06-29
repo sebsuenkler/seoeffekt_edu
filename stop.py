@@ -2,6 +2,8 @@ import sqlite3 as sl
 
 import datetime
 
+import time
+
 def write_to_log(timestamp, content):
     f = open("main.log", "a+")
     f.write(timestamp+": "+content+"\n")
@@ -29,8 +31,11 @@ import psutil
 for proc in psutil.process_iter(attrs=['pid', 'name']):
     if 'python' in proc.info['name']:
 
-        if "main.py" in proc.cmdline():
-            proc.kill()
+        try:
+            if "main.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
 
         try:
             if "job_classifier.py" in proc.cmdline():
@@ -55,6 +60,80 @@ for proc in psutil.process_iter(attrs=['pid', 'name']):
                 proc.kill()
         except:
             pass
+
+        try:
+            if "classifier.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "source.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+time.sleep(30)
+
+for proc in psutil.process_iter(attrs=['pid', 'name']):
+    if 'python' in proc.info['name']:
+
+        try:
+            if "main.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "job_classifier.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "job_reset_scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "job_scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "job_source.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "classifier.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "source.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+time.sleep(60)
+
 
 urls = []
 
