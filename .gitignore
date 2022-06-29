@@ -7,3 +7,4 @@ test_source.py
 test_scraper.py
 geckodriver.log
 *__pycache__*
+*.exe
