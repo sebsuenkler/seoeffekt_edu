@@ -34,26 +34,23 @@ description = input("Insert description of your study (optional): ")
 
 print("\n")
 
-origin_results = input("Do you want to scrape search results (y/n)?: ")
+print("Select Search Engines:")
+
+while not search_engines:
+    for search_engine in search_engines_json:
+        se_choice = ""
+        while se_choice.lower() != "y" or se_choice.lower() != "n":
+            se_choice = input("Do you want to scrape {} (y/n)?: ".format(search_engine))
+            if se_choice.lower() == "y":
+                search_engines.append(search_engine)
+                break;
+            elif se_choice.lower() == "n":
+                break;
+            else:
+                pass
 
 print("\n")
-if origin_results == "y":
-    while not search_engines:
-        for search_engine in search_engines_json:
-            se_choice = ""
-            while se_choice.lower() != "y" or se_choice.lower() != "n":
-                se_choice = input("Do you want to include {} (y/n)?: ".format(search_engine))
-                if se_choice.lower() == "y":
-                    search_engines.append(search_engine)
-                    break;
-                elif se_choice.lower() == "n":
-                    break;
-                else:
-                    pass
 
-print("\n")
-
-#mport_results = input("Do you want to import results (y/n)?: ")
 
 queries = input("Enter the filepath to your queries file (default: queries.csv): ")
 
