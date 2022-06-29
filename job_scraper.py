@@ -2,11 +2,15 @@
 import threading
 import importlib
 from subprocess import call
-from datetime import datetime
 from apscheduler.schedulers.background import BackgroundScheduler
 import os
 import time
+import datetime
 
+def write_to_log(timestamp, content):
+    f = open("main.log", "a+")
+    f.write(timestamp+": "+content+"\n")
+    f.close()
 
 job_defaults = {
     'coalesce': False,
@@ -18,10 +22,15 @@ def job():
 
 if __name__ == '__main__':
     scheduler = BackgroundScheduler(job_defaults=job_defaults, timezone='Europe/Berlin')
-    scheduler.add_job(job, 'interval', seconds=60)
+    scheduler.add_job(job, 'interval', seconds=60, next_run_time=datetime.datetime.now())
     scheduler.start()
-    print('Press Ctrl+{0} to exit'.format('Break' if os.name == 'nt' else 'C'))
-    print('scraper_job')
+
+    time.sleep(1)
+
+    timestamp = datetime.datetime.now()
+    timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
+
+    write_to_log(timestamp, "Job_Scraper started")
 
     try:
         while True:

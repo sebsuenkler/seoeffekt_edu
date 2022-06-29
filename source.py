@@ -10,6 +10,14 @@ def connect_to_db():
 def close_connection_to_db(connection):
     connection.close()
 
+import datetime
+
+def write_to_log(timestamp, content):
+    f = open("main.log", "a+")
+    f.write(timestamp+": "+content+"\n")
+    f.close()
+
+
 
 urls = []
 
@@ -42,7 +50,12 @@ for v in urls:
     source_id = v[0]
     url = v[1]
     source = save_source(url)
-    print(source_id)
+
     cursor.execute("UPDATE SOURCE SET progress =?, source=? WHERE id =?", (1,source,source_id,))
     connection.commit()
     close_connection_to_db(connection)
+
+    imestamp = datetime.datetime.now()
+    timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
+
+    write_to_log(timestamp, "Save Source "+str(url))

@@ -1,6 +1,0 @@
-pip install virtualenv
-conda install -c conda-forge geckodriver
-
-pip3 install lxml
-pip3 install pandas
-pip3 install beautifulsoup4

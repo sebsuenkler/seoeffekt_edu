@@ -21,6 +21,7 @@ try:
             CREATE TABLE source (
                 id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
                 result_id INTERGER,
+                scraper_id INTEGER,
                 source TEXT,
                 progress INTEGER,
                 date DATE

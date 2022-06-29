@@ -12,7 +12,7 @@ reset_ids = []
 
 connection = connect_to_db()
 cursor = connection.cursor()
-data = cursor.execute("SELECT id FROM SCRAPER WHERE progress =? ORDER BY RANDOM()", (-1,))
+data = cursor.execute("SELECT id FROM SCRAPER WHERE progress =?", (-1,))
 connection.commit()
 for row in data:
     id = row[0]

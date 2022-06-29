@@ -1,5 +1,15 @@
 import sqlite3 as sl
 
+import datetime
+
+from lib.sources import get_real_url
+
+def write_to_log(timestamp, content):
+    f = open("main.log", "a+")
+    f.write(timestamp+": "+content+"\n")
+    f.close()
+
+
 def connect_to_db():
     connection = sl.connect('seo_effect.db', timeout=10, isolation_level=None)
     connection.execute('pragma journal_mode=wal')
@@ -37,6 +47,11 @@ if reset_id == 0:
 
     if scraper_id != 0:
 
+        timestamp = datetime.datetime.now()
+        timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
+
+        write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" Query:"+str(query)+" started")
+
         connection = connect_to_db()
         cursor = connection.cursor()
         cursor.execute("UPDATE SCRAPER SET progress =? WHERE id =?", (2,scraper_id,))
@@ -65,6 +80,7 @@ if reset_id == 0:
         xpath_results = search_engines_json[search_engine]['xpath_results']
         max_results_filter = search_engines_json[search_engine]['max_results_filter']
         captcha = search_engines_json[search_engine]['captcha']
+        redirect = search_engines_json[search_engine]['redirect']
 
         search_results = []
         pages = []
@@ -82,7 +98,14 @@ if reset_id == 0:
         def get_search_results(driver):
             source = driver.page_source
             tree = html.fromstring(source)
-            urls = tree.xpath(xpath_results)
+            found_urls = tree.xpath(xpath_results)
+            urls = []
+            for f_url in found_urls:
+                if redirect == "true":
+                    url = get_real_url(f_url)
+                else:
+                    url = f_url
+                urls.append(url)
             return urls
 
         def check_captcha(driver):
@@ -94,28 +117,31 @@ if reset_id == 0:
 
         def check_max_results(driver):
             source = driver.page_source
-            if max_results_filter in source:
+            if max_results_filter in source and max_results_filter != "check_last_result":
                 return True
             else:
                 return False
 
 
         options = Options()
-        options.headless = True
+        options.headless = False
 
         driver = webdriver.Firefox(options=options)
         driver.install_addon(extension_path, temporary=False)
         driver.get(search_url)
-        time.sleep(3)
+        time.sleep(2)
         search = driver.find_element(By.NAME, search_box)
         search.send_keys(query)
         search.send_keys(Keys.RETURN)
-        time.sleep(3)
+        time.sleep(2)
 
         if not check_captcha(driver):
             blocked = False
 
             urls = get_search_results(driver)
+
+            print(urls)
+
             search_results.append(urls)
 
             init_page = 2
@@ -131,17 +157,23 @@ if reset_id == 0:
 
                 if not check_max_results(driver):
 
+                    time.sleep(2)
+
+                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+
                     next_page = driver.find_element(By.XPATH, xpath_next_page.format(p))
 
                     next_page.click()
 
-                    time.sleep(3)
+                    time.sleep(2)
 
                     urls = get_search_results(driver)
+
+                    print(urls)
+
                     search_results.append(urls)
 
                 else:
-                    print("max_results")
                     pass
         else:
             blocked = True
@@ -155,12 +187,22 @@ if reset_id == 0:
             connection.commit()
             close_connection_to_db(connection)
 
+            timestamp = datetime.datetime.now()
+            timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
+
+            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" failed [CAPTCHA]")
+
         else:
             connection = connect_to_db()
             cursor = connection.cursor()
             cursor.execute("UPDATE SCRAPER SET progress =? WHERE id =?", (1,scraper_id,))
             connection.commit()
             close_connection_to_db(connection)
+
+            timestamp = datetime.datetime.now()
+            timestamp = timestamp.strftime("%d-%m-%Y, %H:%M:%S")
+
+            write_to_log(timestamp, "Scrape "+str(search_engine)+" Job_Id:"+str(scraper_id)+" success")
 
 
             import datetime
@@ -209,8 +251,8 @@ if reset_id == 0:
 
                     connection = connect_to_db()
                     cursor = connection.cursor()
-                    sql = 'INSERT INTO SOURCE(result_id, progress, date) values(?,?,?)'
-                    data = (result_id, 0, today)
+                    sql = 'INSERT INTO SOURCE(result_id, scraper_id, progress, date) values(?,?,?,?)'
+                    data = (result_id, scraper_id, 0, today)
                     cursor.execute(sql, data)
                     connection.commit()
                     close_connection_to_db(connection)

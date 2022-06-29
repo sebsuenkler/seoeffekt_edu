@@ -27,17 +27,16 @@ def save_source(url):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(5)
         source = driver.page_source
+
+        if type(source) != "str":
+            source = source.encode('utf-8')
+
+        source = base64.b64encode(source)
+
     except:
         source = "error"
-        print(url)
 
     driver.quit()
-
-    if type(source) != "str":
-        source = source.encode('utf-8')
-
-    if source !="error":
-        source = base64.b64encode(source)
 
     return source
 
@@ -49,13 +48,14 @@ def save_robot_txt(url):
         driver.get(url)
         time.sleep(2)
         source = driver.page_source
+
+        if type(source) != "str":
+            source = source.encode('utf-8')
+
     except:
         source = "error"
 
     driver.quit()
-
-    if type(source) != "str":
-        source = source.encode('utf-8')
 
     return source
 
@@ -85,3 +85,16 @@ def calculate_loading_time(url):
     driver.quit()
 
     return loading_time
+
+
+def get_real_url(url):
+    driver = webdriver.Firefox(options=options)
+    driver.set_page_load_timeout(120)
+    try:
+        driver.get(url)
+        time.sleep(4)
+        current_url = driver.current_url #read real url (redirected url)
+        driver.quit()
+        return current_url
+    except:
+        pass

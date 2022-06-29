@@ -2,3 +2,8 @@
 seo_effect.db-wal
 seo_effect.db
 seo_effect.db-shm
+test_classifier.py
+test_source.py
+test_scraper.py
+geckodriver.log
+*__pycache__*
