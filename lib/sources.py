@@ -58,8 +58,7 @@ def save_robot_txt(url):
         time.sleep(2)
         source = driver.page_source
 
-        if type(source) != "str":
-            source = source.encode('utf-8')
+        source = encode_source(source)
 
     except:
         source = "error"
