@@ -297,6 +297,7 @@ for s in source_results:
     source = s[0]
     if source != "error":
         source = decode_source(s[0])
+    
     url = s[1]
     query = s[2]
     result_id = s[3]

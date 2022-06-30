@@ -1,4 +1,4 @@
-Virtual environment:
+Virtual environment (optional):
 python3 -m venv seoeffekt_edu
 source seoeffekt_edu/bin/activate
 
@@ -8,6 +8,7 @@ pip install pip-review
 pip-review --local --auto
 pip install wheel
 pip install setuptools
+pip install psutil
 pip install apscheduler
 pip install pandas
 pip install beautifulsoup4
@@ -20,3 +21,9 @@ RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckod
 RUN tar -x geckodriver -zf geckodriver-v0.30.0-linux64.tar.gz -O > /usr/local/bin/geckodriver
 RUN chmod +x /usr/local/bin/geckodriver
 RUN rm geckodriver-v0.30.0-linux64.tar.gz
+
+To use the tool:
+Create a csv file (e.g. queries.csv) with search queries (one per row)
+RUN python insert_study.py to create a new study (type yes to scrape results and select which search engines you want to include)
+RUN main.py or RUN nohup python main.py & (a BackgroundScheduler will start threads to scrape and classify results; check the main.log for progress)
+RUN check_status.py to see if the tool is done

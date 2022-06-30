@@ -26,6 +26,7 @@ def encode_source(source):
 def decode_source(source):
     source_decoded = base64.b64decode(source)
     source_decoded = BeautifulSoup(source_decoded, "html.parser")
+    source_decoded = str(source_decoded)
     return source_decoded
 
 def save_source(url):
