@@ -57,58 +57,93 @@ def classify_result(source, url, query, result_id):
         else:
             return False
 
+    def get_meta(url):
+        meta = []
+        try:
+            parsed_uri = urlparse(url)
+            hostname = '{uri.netloc}'.format(uri=parsed_uri)
+            ip = socket.gethostbyname(hostname)
+        except:
+            ip = "-1"
+
+        main = '{0.scheme}://{0.netloc}/'.format(urlsplit(url))
+        meta = [ip, main]
+        return meta
+
+    meta = get_meta(url)
+
+
+
+    def get_hyperlinks(source, main = meta[1]):
+        hyperlinks = ""
+
+        if source !="error":
+            #extract all comments in source code
+            soup = BeautifulSoup(source, 'lxml')
+
+            soup_urls = []
+            tags = soup.find_all('a')
+
+            for tag in tags:
+                hyperlink_text = str(tag.string).strip()
+                href = str(tag.get('href')).strip()
+                if "http" not in href:
+                    href = href.lstrip('/')
+                    href = main+href
+
+                hyperlink = "[url]"+hyperlink_text+"   "+href
+                if not match_text(hyperlink, '*mailto:*'):
+                    if hyperlink and hyperlink != " ":
+                        hyperlinks = hyperlinks+hyperlink
+
+            return hyperlinks
+
+
+
+    def check_classification_dup(result_id):
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        dup = False
+        data = cursor.execute("SELECT result_id FROM CLASSIFICATION WHERE result_id = ?",(result_id,))
+        connection.commit()
+        for row in data:
+            dup = row
+        close_connection_to_db(connection)
+        if not dup:
+            return True
+        else:
+            return False
+
+    def check_insert_result_dup(module):
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        dup = False
+        data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? AND module = ?",(result_id, module,))
+        connection.commit()
+        for row in data:
+            dup = row
+        close_connection_to_db(connection)
+        if not dup:
+            return True
+        else:
+            return False
+
+    def insert_results(module, insert_result):
+        connection = connect_to_db()
+        cursor = connection.cursor()
+        sql = 'INSERT INTO EVALUATION(result_id, module, value, date) values(?,?,?,?)'
+        data = (result_id, module, insert_result, today)
+        cursor.execute(sql, data)
+        connection.commit()
+        close_connection_to_db(connection)
 
     if check_progress_classification():
 
         if source !="error":
 
-
-            def get_meta(url):
-                meta = []
-                try:
-                    parsed_uri = urlparse(url)
-                    hostname = '{uri.netloc}'.format(uri=parsed_uri)
-                    ip = socket.gethostbyname(hostname)
-                except:
-                    ip = "-1"
-
-                main = '{0.scheme}://{0.netloc}/'.format(urlsplit(url))
-                meta = [ip, main]
-                return meta
-
-            meta = get_meta(url)
-
-
-
-            def get_hyperlinks(source, main = meta[1]):
-                hyperlinks = ""
-
-                if source !="error":
-                    #extract all comments in source code
-                    soup = BeautifulSoup(source, 'lxml')
-
-                    soup_urls = []
-                    tags = soup.find_all('a')
-
-                    for tag in tags:
-                        hyperlink_text = str(tag.string).strip()
-                        href = str(tag.get('href')).strip()
-                        if "http" not in href:
-                            href = href.lstrip('/')
-                            href = main+href
-
-                        hyperlink = "[url]"+hyperlink_text+"   "+href
-                        if not match_text(hyperlink, '*mailto:*'):
-                            if hyperlink and hyperlink != " ":
-                                hyperlinks = hyperlinks+hyperlink
-
-                    return hyperlinks
-
             hyperlinks = get_hyperlinks(source)
 
             indicators = {}
-
-
 
             indicators['url_length'] = identify_url_length(url)
             indicators['https'] = identify_https(url)
@@ -143,44 +178,6 @@ def classify_result(source, url, query, result_id):
             indicators['robots_txt'] = identify_robots_txt(meta[1])
 
             indicators['loading_time'] = identify_loading_time(url)
-
-            def check_insert_result_dup(module):
-                connection = connect_to_db()
-                cursor = connection.cursor()
-                dup = False
-                data = cursor.execute("SELECT result_id FROM EVALUATION WHERE result_id = ? AND module = ?",(result_id, module,))
-                connection.commit()
-                for row in data:
-                    dup = row
-                close_connection_to_db(connection)
-                if not dup:
-                    return True
-                else:
-                    return False
-
-
-            def insert_results(module, insert_result):
-                connection = connect_to_db()
-                cursor = connection.cursor()
-                sql = 'INSERT INTO EVALUATION(result_id, module, value, date) values(?,?,?,?)'
-                data = (result_id, module, insert_result, today)
-                cursor.execute(sql, data)
-                connection.commit()
-                close_connection_to_db(connection)
-
-            def check_classification_dup():
-                connection = connect_to_db()
-                cursor = connection.cursor()
-                dup = False
-                data = cursor.execute("SELECT result_id FROM CLASSIFICATION WHERE result_id = ?",(result_id,))
-                connection.commit()
-                for row in data:
-                    dup = row
-                close_connection_to_db(connection)
-                if not dup:
-                    return True
-                else:
-                    return False
 
 
             for key, value in indicators.items():
@@ -278,7 +275,7 @@ def classify_result(source, url, query, result_id):
         if source == "error":
             classification_result = "error"
 
-        if check_classification_dup():
+        if check_classification_dup(result_id):
             connection = connect_to_db()
             cursor = connection.cursor()
             sql = 'INSERT INTO CLASSIFICATION(result_id, classification, value, date) values(?,?,?,?)'
@@ -290,14 +287,14 @@ def classify_result(source, url, query, result_id):
 
 connection = connect_to_db()
 cursor = connection.cursor()
-source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
+source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) AND ORDER BY RANDOM() LIMIT 5")
 connection.commit()
 
 for s in source_results:
     source = s[0]
     if source != "error":
         source = decode_source(s[0])
-    
+
     url = s[1]
     query = s[2]
     result_id = s[3]

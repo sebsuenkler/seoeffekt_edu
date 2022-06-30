@@ -5,7 +5,7 @@ import json
 from lxml import html
 from bs4 import BeautifulSoup
 
-from lib.sources import save_robot_txt
+from lib.sources import *
 from lib.sources import calculate_loading_time
 
 def match_text(text, pattern):
@@ -427,28 +427,33 @@ def identify_robots_txt(main):
 
     try:
         source = save_robot_txt(robots_url)
-        source = source.decode("utf-8")
-        source = source.lower()
 
-        pattern = "*crawl-delay*"
-        if match_text(source, pattern):
-            result = 1
+        if source:
+            source = decode_source(source)
 
-        pattern = "*user agent*"
-        if match_text(source, pattern):
-            result = 1
+            pattern = "*crawl-delay*"
+            if match_text(source, pattern):
+                result = 1
 
-        pattern = "*sitemap*"
-        if match_text(source, pattern):
-            result = 1
+            pattern = "*user agent*"
+            if match_text(source, pattern):
+                result = 1
 
-        pattern = "*noindex*"
-        if match_text(source, pattern):
-            result = 1
+            pattern = "*user-agent*"
+            if match_text(source, pattern):
+                result = 1
 
-        pattern = "*seo*"
-        if match_text(source, pattern):
-            result = 1
+            pattern = "*sitemap*"
+            if match_text(source, pattern):
+                result = 1
+
+            pattern = "*noindex*"
+            if match_text(source, pattern):
+                result = 1
+
+            pattern = "*seo*"
+            if match_text(source, pattern):
+                result = 1
 
     except:
         result = -1

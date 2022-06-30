@@ -58,11 +58,10 @@ def save_robot_txt(url):
         driver.get(url)
         time.sleep(2)
         source = driver.page_source
-
         source = encode_source(source)
 
     except:
-        source = "error"
+        source = False
 
     driver.quit()
 
