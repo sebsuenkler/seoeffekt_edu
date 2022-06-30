@@ -8,3 +8,6 @@ test_scraper.py
 geckodriver.log
 *__pycache__*
 *.exe
+test_source.txt
+test_source_dec.html
+geckodriver.log

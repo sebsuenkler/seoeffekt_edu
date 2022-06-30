@@ -18,6 +18,8 @@ import sqlite3 as sl
 
 import datetime
 
+from lib.sources import *
+
 def write_to_log(timestamp, content):
     f = open("main.log", "a+")
     f.write(timestamp+": "+content+"\n")
@@ -294,7 +296,7 @@ connection.commit()
 for s in source_results:
     source = s[0]
     if source != "error":
-        source = str(base64.b64decode(s[0]))
+        source = decode_source(s[0])
     url = s[1]
     query = s[2]
     result_id = s[3]

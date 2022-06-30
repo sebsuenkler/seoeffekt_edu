@@ -10,11 +10,23 @@ current_path = os.path.abspath(os.getcwd())
 
 import base64
 
+from bs4 import BeautifulSoup
+
 if os.name == "nt":
     extension_path = current_path+"\i_dont_care_about_cookies-3.4.0.xpi"
 
 else:
     extension_path = current_path+"/i_dont_care_about_cookies-3.4.0.xpi"
+
+def encode_source(source):
+    source = source.encode('utf-8','ignore')
+    source = base64.b64encode(source)
+    return source
+
+def decode_source(source):
+    source_decoded = base64.b64decode(source)
+    source_decoded = BeautifulSoup(source_decoded, "html.parser")
+    return source_decoded
 
 def save_source(url):
 
@@ -27,11 +39,8 @@ def save_source(url):
         driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
         time.sleep(5)
         source = driver.page_source
+        source = encode_source(source)
 
-        if type(source) != "str":
-            source = source.encode('utf-8')
-
-        source = base64.b64encode(source)
 
     except:
         source = "error"
@@ -85,6 +94,7 @@ def calculate_loading_time(url):
     driver.quit()
 
     return loading_time
+
 
 
 def get_real_url(url):

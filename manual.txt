@@ -1,0 +1,22 @@
+Virtual environment:
+python3 -m venv seoeffekt_edu
+source seoeffekt_edu/bin/activate
+
+Installation:
+pip install --upgrade pip
+pip install pip-review
+pip-review --local --auto
+pip install wheel
+pip install setuptools
+pip install apscheduler
+pip install pandas
+pip install beautifulsoup4
+pip install lxml
+pip install -U selenium
+
+Fix for issues with Firefox/geckodriver using selenium:
+RUN pip install -U selenium==4.1.0
+RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz
+RUN tar -x geckodriver -zf geckodriver-v0.30.0-linux64.tar.gz -O > /usr/local/bin/geckodriver
+RUN chmod +x /usr/local/bin/geckodriver
+RUN rm geckodriver-v0.30.0-linux64.tar.gz
