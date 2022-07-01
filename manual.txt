@@ -28,4 +28,5 @@ Create a csv file (e.g. queries.csv) with search queries (one per row)
 RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)
 RUN python start.py or RUN nohup python start.py & : to run a BackgroundScheduler starting the threads to scrape and classify results; check the tool.log for progress
 RUN python check_status.py : to see if the tool is done
+RUN python export_results.py : export classified search results from the database
 RUN python stop.py : you can stop the tool at any point and restrat it with python start.py
