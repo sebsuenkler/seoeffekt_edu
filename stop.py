@@ -15,6 +15,7 @@ write_to_log(timestamp, "Stop the tool")
 
 import psutil
 for proc in psutil.process_iter(attrs=['pid', 'name']):
+
     if 'python' in proc.info['name']:
 
         try:
@@ -61,6 +62,18 @@ for proc in psutil.process_iter(attrs=['pid', 'name']):
 
         try:
             if "scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "firefox" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "geckodriver" in proc.cmdline():
                 proc.kill()
         except:
             pass
@@ -114,6 +127,18 @@ for proc in psutil.process_iter(attrs=['pid', 'name']):
 
         try:
             if "scraper.py" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "firefox" in proc.cmdline():
+                proc.kill()
+        except:
+            pass
+
+        try:
+            if "geckodriver" in proc.cmdline():
                 proc.kill()
         except:
             pass

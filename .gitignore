@@ -2,13 +2,7 @@
 seo_effect.db-wal
 seo_effect.db
 seo_effect.db-shm
-test_classifier.py
-test_source.py
-test_scraper.py
 *__pycache__*
 *.exe
-test_source.txt
-test_source_dec.html
-geckodriver.log
 *.log
-*.log
+test*.py
