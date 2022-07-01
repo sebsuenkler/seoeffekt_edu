@@ -11,3 +11,4 @@ test_source.txt
 test_source_dec.html
 geckodriver.log
 *.log
+*.log
