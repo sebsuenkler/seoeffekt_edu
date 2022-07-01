@@ -60155,5 +60155,141 @@ console.warn: SearchSettings: "get: No settings file exists, new profile?" (new 
 DevTools listening on ws://localhost:63952/devtools/browser/c47f8738-0ef4-404a-97a3-7b8bd8d07953
 Read port: 63986
 1656681837148	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
-1656681837192	geckodriver	INFO	Listening on 127.0.0.1:63988
-1656681838815	geckodriver	INFO	Listening on 127.0.0.1:64030
+1656681862534	Marionette	INFO	Stopped listening on port 63986
+!!! error running onStopped callback: TypeError: callback is not a function
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DestroyBrowsingContextGroup) Channel closing: too late to send/recv, messages will be lost
+
+" "localhost" "-no-remote" "-profile" "C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofiledai2TU"
+*** You are running in headless mode.
+1656681842009	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:64031
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofiledai2TU\\search.json.mozlz4", (void 0)))
+1656681843847	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "64047" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\stahl\\AppData\\Local\1656681858172	Marionette	INFO	Stopped listening on port 64100
+
+###!!! [Child][PContentChild] Error: Send(msgname=PContent::Msg_RecordDiscardedData) Channel closing: too late to send/recv, messages will be lost
+
+!!! error running onStopped callback: TypeError: callback is not a function
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PHttpChannel::Msg_DeleteSelf) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+ing on ws://localhost:64132/devtools/browser/7aa358a5-40d1-44b9-aaed-21c1c07db2a0
+1656681847579	gec1656681847588	RemoteAgent	WARN	TLS certific1656681850580	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "64222" "--remote-allow-hosts" "localhost" "-no-remote" "-p1656681853556	Marionette	INFO	Stopped listening on port 64218
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+enderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofilebbZzhR\\search.json.mozlz4", (void 0)))
+1656681851351	Marionette	INFO	Listening on port 64305
+DevTools listening on ws://localhost:64222/devtools/browser/eaedaec3-3849-440d-a918-cf4490d83fc7
+Read port: 64305
+1656681851396	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1656681858188	Marionette	INFO	Stopped listening on port 64305
+!!! error running onStopped callback: TypeError: callback is not a function
+[Parent 9952, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+ionette enabled
+WebDriver BiDi listening on ws://localhost:64340
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofileBbyvPm\\search.json.mozlz4", (void 0)))
+1656681858962	Marionette	INFO	Listening on port 64362
+DevTools listening on ws://localhost:64340/devtools/browser/e7adb214-4c7d-42f7-b9fd-97a56a28746a
+Read port: 64362
+1656681859054	geckodriver	INFO	Listening on 127.0.0.1:64366
+1656681862058	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "64367" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofile1XANdd"
+*** You 1656681864659	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "64398" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofile3zchti"
+*** You are running in headless mode.
+1656681864866	Marionette	INFO	Marionette enabled
+WebDriver BiDi listening on ws://localhost:64398
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofile3zc1656681879686	Marionette	INFO	Stopped listening on port 64420
+!!! error running onStopped callback: TypeError: callback is not a function
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+56681871767	Marionette	INFO	Stopped listening on port 64478
+!!! error running onStopped callback: TypeError: callback is not a function
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofiledyiiSz\\search.json.mozlz4", (void 0)))
+1656681867080	Marionette	INFO	Listening on port 64538
+Read port: 64538
+DevTools listening on ws://localhost:64426/devtools/browser/d9572e01-218a-45b5-a1b6-065578b6cfb3
+1656681867172	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+1656681883481	Marionette	INFO	Stopped listening on port 64538
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Reply_DiscardBrowsingContext) Closed channel: cannot send/recv
+
+
+###!!! [Parent][PContentParent] Error: Send(msgname=PContent::Msg_DestroyBrowsingContextGroup) Closed channel: cannot send/recv
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: Send(msgname=PHttpChannel::Msg_DeletingChannel) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Msg_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+
+###!!! [Child][PContentChild] Error: RunMessage(msgname=PContent::Reply_DiscardBrowsingContext) Channel closing: too late to send/recv, messages will be lost
+
+unner	INFO	Running command: "C:\\Program Files\\Mozilla Firefox\\firefox.exe" "--marionette" "-headless" "--remote-debugging-port" "64642" "--remote-allow-hosts" "localhost" "-no-remote" "-profile" "C:\\Users\\stahl\\AppData\\Local\\Temp\\ru1656681877599	Marionette	INFO	Marionette enabled
+WebDriver 1656681877651	Marionette	INFO	Marionette[GFX1-]: RenderCompositorSWGL failed mapping default framebu[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Te1656681878184	Marionette	INFO	Listening on port 64684
+DevTo1656681878263	Marionette	INFO	Listening on port 64689
+Read port: 64689
+1656681878275	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+DevTools listening on ws://localhost:61656681880483	Marionette	INFO	Stopped listening on port 6468JavaScript warning: https://scripts.zeit.de/iqd/cdn_zeit_async/live/iqadcontroller.js, line 7: unreachable code after return statement
+1656681885598	Marionette	INFO	Stopped listening on port 64689
+[Parent 44348, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+[Parent 44348, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+tening on ws://localhost:64760
+[GFX1-]: RenderCompositorSWGL failed mapping default framebuffer, no dt
+console.warn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofilejoGDHr\\search.json.mozlz4", (void 0)))
+1656681884768	Marionette	INFO	Listening on port 64821
+DevTools listening on ws://localhost:64760/devtools/broJavaScript warning: https://s3.eu-central-1.amazonaws.com/pr1656681887551	mozrunner::runner	INFO	Running command: "C:\\Program Files\\Mozilla Firefo1656681892126	Marionette	INFO	Stopped listening on port 64821
+!!! error running onStopped callback: TypeError: callback is not a function
+[Parent 53220, IPC I/O Parent] WARNING: file /builds/worker/checkouts/gecko/ipc/chromium/src/base/process_util_win.cc:167
+
+###!!! [Parent][PImageBridgeParent] Error: RunMessage(msgname=PImageBridge::Msg_WillClose) Channel closing: too late to send/recv, messages will be lost
+
+arn: SearchSettings: "get: No settings file exists, new profile?" (new NotFoundError("Could not open the file at C:\\Users\\stahl\\AppData\\Local\\Temp\\rust_mozprofileDoadW8\\search.json.mozlz4", (void 0)))
+1656681888323	Marionette	INFO	Listening on port 64948
+DevTools listening on ws://localhost:64807/devtools/browser/f4384a7b-0b82-46d7-a00e-4d35fb7bc67c
+Read port: 64948
+1656681888366	RemoteAgent	WARN	TLS certificate errors will be ignored for this session
+JavaScript error: https://cdn.netpoint-media.de/1270735.js, line 3: Error: wait for CMP
+JavaScript error: https://www.mallorcazeitung.es/boulevard/auswanderer/2022/06/27/goodbye-deutschland-ercan-bar-shisha-67703147.html line 249 > injectedScript, line 2: TypeError: googletag.pubads().getSlots()[0] is undefined
+JavaScript warning: https://ubn3k2x9bfd2yw3n3.ay.delivery/ivt/uBN3k2X9Bfd2yw3N3/ivt.min.js, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://pagead2.googlesyndication.com/bg/edue1xTc5YuiZOhJi4VIA_c20CetZt5T9y7Q3cNnrTA.js line 2 > eval line 2556 > eval line 1 > eval line 1 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://pagead2.googlesyndication.com/bg/edue1xTc5YuiZOhJi4VIA_c20CetZt5T9y7Q3cNnrTA.js line 2 > eval line 3645 > eval line 1 > eval line 1 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript warning: https://pagead2.googlesyndication.com/bg/edue1xTc5YuiZOhJi4VIA_c20CetZt5T9y7Q3cNnrTA.js line 2 > eval line 869 > eval line 1 > eval line 1 > eval, line 1: WEBGL_debug_renderer_info is deprecated in Firefox and will be removed. Please use RENDERER.
+JavaScript error: https://eus.rubiconproject.com/usync.js, line 4: SecurityError: The operation is insecure.
+0.1:57089
