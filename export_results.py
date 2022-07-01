@@ -1,12 +1,6 @@
-import sqlite3 as sl
 import pandas as pd
 
-def connect_to_db():
-    connection = sl.connect('seo_effect.db', timeout=10)
-    return connection
-
-def close_connection_to_db(connection):
-    connection.close()
+from db import *
 
 file_name = False
 while not file_name:

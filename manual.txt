@@ -23,7 +23,9 @@ RUN chmod +x /usr/local/bin/geckodriver
 RUN rm geckodriver-v0.30.0-linux64.tar.gz
 
 To use the tool:
+RUN /install/python install_sqlite.py : to install the database
 Create a csv file (e.g. queries.csv) with search queries (one per row)
-RUN python insert_study.py to create a new study (type yes to scrape results and select which search engines you want to include)
-RUN main.py or RUN nohup python main.py & (a BackgroundScheduler will start threads to scrape and classify results; check the main.log for progress)
-RUN check_status.py to see if the tool is done
+RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)
+RUN python start.py or RUN nohup python start.py & : to run a BackgroundScheduler starting the threads to scrape and classify results; check the tool.log for progress
+RUN python check_status.py : to see if the tool is done
+RUN python stop.py : you can stop the tool at any point and restrat it with python start.py

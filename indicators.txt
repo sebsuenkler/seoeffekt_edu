@@ -1,0 +1,33 @@
+Indicator                     Description                                             Class
+url_length                    The length of the url                                   to implement
+https                         Check if https is used                                  probably_optimized
+micros                        Check if any microformats is used (e.g. JSON-LD)        most_probably_optimized
+og                            Check if og-tags are used                               probably_not_optimized
+viewport                      Check if viewport is used for responsive web design     probably_optimized
+sitemap                       Check if sitemap is used                                probably_optimized
+wordpress                     Check if the cms wordpress is used                      to implement
+canonical                     Check if canonical links are used                       probably_optimized
+nofollow                      Check if nofollow links are used                        probably_optimized
+h1                            Check if page uses h1 headers                           to implement
+keywords_in_source            Counts number of keywords from query in sources         to implement
+keywords_in_url               Counts number of keywords in url                        to implement
+keyword_density               Calculates keyword density                              to implement
+description                   Check if page uses description                          probably_not_optimized
+title                         Check if page uses title                                probably_not_optimized
+internal                      Number of internal links                                to implement
+external                      Number of external links                                to implement
+tools analytics               Check if page uses analytics tools                      probably_optimized
+tools seo                     Check if page uses seo tools                            most_probably_optimized
+tools caching                 Check if page uses caching tools                        to implement
+tools content                 Check if page uses tools to rewrite content             to implement
+tools social                  Check if page uses social media tools                   to implement
+tools ads                     Check if page uses ads tools                            to implement
+ads                           Check if page is known as using ads                     most_probably_optimized
+company                       Check if page belongs to a company                      probably_optimized
+seo_customers                 Check if page is a known customer of a seo agency       most_probably_optimized
+news                          Check if page is a provider for news                    most_probably_optimized
+not_optimized                 Check if page is knows as not using seo                 most_probably_not_optimized
+search_engine_services        Check if page is a knows search engine service          to implement
+shops                         Check if page is a shop                                 probably_optimized
+robots_txt                    Check if page has seo methods in robots.txt             probably_optimized
+loading_time                  Calculates the loading time of a page                   probably_optimized; probably_not_optimized

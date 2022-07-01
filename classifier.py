@@ -14,25 +14,13 @@ import fnmatch
 
 from lib.identify_indicators import *
 
-import sqlite3 as sl
+
 
 import datetime
 
 from lib.sources import *
-
-def write_to_log(timestamp, content):
-    f = open("main.log", "a+")
-    f.write(timestamp+": "+content+"\n")
-    f.close()
-
-def connect_to_db():
-    connection = sl.connect('seo_effect.db', timeout=10, isolation_level=None)
-    connection.execute('pragma journal_mode=wal')
-    return connection
-
-def close_connection_to_db(connection):
-    connection.close()
-
+from log import *
+from db import *
 
 
 def classify_result(source, url, query, result_id):
@@ -266,7 +254,7 @@ def classify_result(source, url, query, result_id):
                 classification_result = 'probably_optimized'
 
             #probably_not_optimized
-            if title == 0 or description == 0 or loading_time > 30:
+            if (title == 0 or description == 0 or loading_time > 30) and og == 0:
                 classification_result = 'probably_not_optimized'
 
             if sources_not_optimized > 0:
@@ -287,7 +275,7 @@ def classify_result(source, url, query, result_id):
 
 connection = connect_to_db()
 cursor = connection.cursor()
-source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) AND ORDER BY RANDOM() LIMIT 5")
+source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
 connection.commit()
 
 for s in source_results:

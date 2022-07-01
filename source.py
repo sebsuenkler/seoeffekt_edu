@@ -1,29 +1,15 @@
 from lib.sources import save_source
 
-import sqlite3 as sl
-
-def connect_to_db():
-    connection = sl.connect('seo_effect.db', timeout=10, isolation_level=None)
-    connection.execute('pragma journal_mode=wal')
-    return connection
-
-def close_connection_to_db(connection):
-    connection.close()
-
 import datetime
 
-def write_to_log(timestamp, content):
-    f = open("main.log", "a+")
-    f.write(timestamp+": "+content+"\n")
-    f.close()
-
-
+from db import *
+from log import *
 
 urls = []
 
 connection = connect_to_db()
 cursor = connection.cursor()
-data = cursor.execute("SELECT SOURCE.id, SOURCE.result_id, SEARCH_RESULT.url FROM SOURCE,SEARCH_RESULT WHERE SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.PROGRESS=? ORDER BY RANDOM() LIMIT 5", (0,))
+data = cursor.execute("SELECT SOURCE.id, SOURCE.result_id, SEARCH_RESULT.url FROM SOURCE,SEARCH_RESULT WHERE SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.PROGRESS=? ORDER BY RANDOM() LIMIT 10", (0,))
 connection.commit()
 
 for row in data:

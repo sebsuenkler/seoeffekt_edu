@@ -1,22 +1,9 @@
-import sqlite3 as sl
-
 import datetime
 
 from lib.sources import get_real_url
 
-def write_to_log(timestamp, content):
-    f = open("main.log", "a+")
-    f.write(timestamp+": "+content+"\n")
-    f.close()
-
-
-def connect_to_db():
-    connection = sl.connect('seo_effect.db', timeout=10, isolation_level=None)
-    connection.execute('pragma journal_mode=wal')
-    return connection
-
-def close_connection_to_db(connection):
-    connection.close()
+from db import *
+from log import *
 
 scraper_id = 0
 reset_id = 0
@@ -157,21 +144,23 @@ if reset_id == 0:
 
                 if not check_max_results(driver):
 
-                    time.sleep(2)
+                    try:
+                        time.sleep(2)
 
-                    driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+                        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
-                    next_page = driver.find_element(By.XPATH, xpath_next_page.format(p))
+                        next_page = driver.find_element(By.XPATH, xpath_next_page.format(p))
 
-                    next_page.click()
+                        next_page.click()
 
-                    time.sleep(2)
+                        time.sleep(2)
 
-                    urls = get_search_results(driver)
+                        urls = get_search_results(driver)
 
-
-
-                    search_results.append(urls)
+                        search_results.append(urls)
+                        
+                    except:
+                        pass
 
                 else:
                     pass

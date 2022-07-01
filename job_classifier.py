@@ -7,10 +7,7 @@ import os
 import time
 import datetime
 
-def write_to_log(timestamp, content):
-    f = open("main.log", "a+")
-    f.write(timestamp+": "+content+"\n")
-    f.close()
+from log import *
 
 job_defaults = {
     'coalesce': False,
