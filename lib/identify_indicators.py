@@ -122,7 +122,7 @@ def identify_micros(source):
 
 def identify_og(source):
 
-    pattern = '*meta*og:*'
+    pattern = '<*meta*og:*>'
     result = 0
 
     if match_text(source, pattern):
