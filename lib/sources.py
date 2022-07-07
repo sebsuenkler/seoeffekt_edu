@@ -1,7 +1,10 @@
 from selenium import webdriver
 from selenium.webdriver.firefox.options import Options
+
 options = Options()
 options.headless = True
+
+
 
 import time
 
@@ -30,21 +33,32 @@ def decode_source(source):
     return source_decoded
 
 def save_source(url):
-
+    #add error_codes in the future
+    source = ""
     driver = webdriver.Firefox(options=options)
     driver.install_addon(extension_path, temporary=False)
     driver.set_page_load_timeout(120)
     try:
         driver.get(url)
-        time.sleep(10)
-        driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
-        time.sleep(5)
-        source = driver.page_source
-        source = encode_source(source)
-
 
     except:
         source = "error"
+
+    if source != "error":
+
+        try:
+            time.sleep(10)
+            try:
+                driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+            except:
+                pass
+
+            time.sleep(5)
+            source = driver.page_source
+            source = encode_source(source)
+
+        except:
+            source = "error"
 
     driver.quit()
 
@@ -53,12 +67,15 @@ def save_source(url):
 def save_robot_txt(url):
 
     driver = webdriver.Firefox(options=options)
-    driver.set_page_load_timeout(120)
+    driver.set_page_load_timeout(10)
     try:
         driver.get(url)
         time.sleep(2)
         source = driver.page_source
-        source = encode_source(source)
+        try:
+            source = encode_source(source)
+        except:
+            pass
 
     except:
         source = False
