@@ -275,13 +275,16 @@ def classify_result(source, url, query, result_id):
 
 connection = connect_to_db()
 cursor = connection.cursor()
-source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) ORDER BY RANDOM() LIMIT 5")
+source_results = cursor.execute("SELECT source, url, query, SOURCE.result_id  FROM SOURCE, SEARCH_RESULT, QUERY WHERE SOURCE.result_id = SEARCH_RESULT.id AND SEARCH_RESULT.query_id = QUERY.id AND progress = 1 AND SOURCE.result_id = SEARCH_RESULT.id AND SOURCE.result_id NOT IN (SELECT CLASSIFICATION.result_id FROM CLASSIFICATION) AND SOURCE.source IS NOT NULL ORDER BY RANDOM() LIMIT 5")
 connection.commit()
 
 for s in source_results:
     source = s[0]
     if source != "error":
-        source = decode_source(s[0])
+        try:
+            source = decode_source(s[0])
+        except:
+            source = "error"
 
     url = s[1]
     query = s[2]
