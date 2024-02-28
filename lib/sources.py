@@ -1,9 +1,6 @@
-from selenium import webdriver
-from selenium.webdriver.firefox.options import Options
+from seleniumwire import webdriver
 
-options = Options()
-options.headless = True
-
+from selenium.webdriver.chrome.options import Options
 
 
 import time
@@ -21,6 +18,20 @@ if os.name == "nt":
 else:
     extension_path = current_path+"/i_dont_care_about_cookies-3.4.0.xpi"
 
+options = Options()
+desired_dpi = 1.0
+options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
+options.add_argument('--no-sandbox')
+options.add_argument("--start-maximized")
+options.add_argument('--disable-dev-shm-usage')
+
+#remove the comment if you want to scrape with the headless browser
+#options.add_argument('--headless=new')
+
+
+options.add_extension(extension_path)
+
+
 def encode_source(source):
     source = source.encode('utf-8','ignore')
     source = base64.b64encode(source)
@@ -35,8 +46,7 @@ def decode_source(source):
 def save_source(url):
     #add error_codes in the future
     source = ""
-    driver = webdriver.Firefox(options=options)
-    driver.install_addon(extension_path, temporary=False)
+    driver = webdriver.Chrome(options=options)
     driver.set_page_load_timeout(120)
     try:
         driver.get(url)
@@ -57,7 +67,8 @@ def save_source(url):
             source = driver.page_source
             source = encode_source(source)
 
-        except:
+        except Exception as e:
+            print(str(e))
             source = "error"
 
     driver.quit()
@@ -66,8 +77,8 @@ def save_source(url):
 
 def save_robot_txt(url):
 
-    driver = webdriver.Firefox(options=options)
-    driver.set_page_load_timeout(10)
+    driver = webdriver.Chrome(options=options)
+    driver.set_page_load_timeout(30)
     try:
         driver.get(url)
         time.sleep(2)
@@ -85,8 +96,7 @@ def save_robot_txt(url):
     return source
 
 def calculate_loading_time(url):
-    driver = webdriver.Firefox(options=options)
-    driver.install_addon(extension_path, temporary=False)
+    driver = webdriver.Chrome(options=options)
     driver.set_page_load_timeout(120)
     loading_time = -1
 
@@ -104,7 +114,9 @@ def calculate_loading_time(url):
         frontendPerformance_calc = domComplete - responseStart
         loadingTime = EventEnd - navigationStart
         loading_time = loadingTime / 1000
-    except:
+        driver.quit()
+    except Exception as e:
+        print(str(e))
         pass
 
     driver.quit()
@@ -114,7 +126,7 @@ def calculate_loading_time(url):
 
 
 def get_real_url(url):
-    driver = webdriver.Firefox(options=options)
+    driver = webdriver.Chrome(options=options)
     driver.set_page_load_timeout(120)
     try:
         driver.get(url)
@@ -124,3 +136,4 @@ def get_real_url(url):
         return current_url
     except:
         pass
+    driver.quit()

@@ -67,13 +67,13 @@ for proc in psutil.process_iter(attrs=['pid', 'name']):
             pass
 
         try:
-            if "firefox" in proc.cmdline():
+            if "chrome" in proc.cmdline():
                 proc.kill()
         except:
             pass
 
         try:
-            if "geckodriver" in proc.cmdline():
+            if "chromedriver" in proc.cmdline():
                 proc.kill()
         except:
             pass
@@ -132,13 +132,13 @@ for proc in psutil.process_iter(attrs=['pid', 'name']):
             pass
 
         try:
-            if "firefox" in proc.cmdline():
+            if "chrome" in proc.cmdline():
                 proc.kill()
         except:
             pass
 
         try:
-            if "geckodriver" in proc.cmdline():
+            if "chromedriver" in proc.cmdline():
                 proc.kill()
         except:
             pass
