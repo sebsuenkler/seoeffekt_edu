@@ -14,4 +14,6 @@ Funded by: German Research Foundation (DFG – Deutsche Forschungsgemeinschaft),
 
 Contacts: [SearchStudies](https://searchstudies.org)
 
+For more information about the implemented SEO-Classifier: [SEO-Effekt - Development and software implementation of a preliminary model to identify the probability of search engine optimization on webpages](https://osf.io/vzehn/)
+
 Research data: [OSF](https://osf.io/jyv9r/)
