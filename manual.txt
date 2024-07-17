@@ -29,7 +29,6 @@ Google_de_Top10: Scraper to collect the top-10 search results from the German ve
 Bing_de_Top10: Scraper to collect the top-10 search results from the German verson of Bing
 
 To use the tool:
-MAKE A COPY of seo_effect_empty.db and rename it to seo_effect.db
 RUN /install/python install_sqlite.py : to install the database
 Create a csv file (e.g. queries.csv) with search queries (one per row)
 RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)

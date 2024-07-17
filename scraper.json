@@ -4,19 +4,19 @@
       "scraper_file": "google_de",
       "limit": 100
    },
-   "Google.de_Example":{
+   "Google.de_Top10":{
       "search_engine":"Google.de_Top10",
       "scraper_file": "google_de_top10",
-      "limit": 20
+      "limit": 10
    },
    "Bing.de":{
       "search_engine":"Bing.de",
       "scraper_file": "bing_de",
       "limit": 100
   },
-   "Bing.de_Example":{
+   "Bing.de_Top10":{
       "search_engine":"Bing.de_Top10",
       "scraper_file": "bing_de_top10",
-      "limit": 20
+      "limit": 10
    }
 }
