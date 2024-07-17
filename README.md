@@ -1,17 +1,20 @@
 ### Installation Guide
 ```
 git clone https://github.com/searchstudies/seoeffekt_edu
+```
 
 Virtual environment (optional):
+```
 python3 -m venv seoeffekt_edu
 source seoeffekt_edu/bin/activate
 ```
+
 Installation of the packaged:
 ```
 pip install -r requirements.txt
-
+```
 Or if you have problems with the installation of the requirements.txt, consider to install them manually:
-
+```
 pip install --upgrade pip
 pip install pip-review
 pip-review --local --auto
@@ -26,24 +29,19 @@ pip install seleniumbase
 ```
 
 Available Scrapers:
-```
-Google_de: Scraper to collect search results from the German version Google
-Bing_de: Scraper to collect search results from the German verson of Bing
-Google_de_Top10: Scraper to collect the top-10 search results from the German version Google
-Bing_de_Top10: Scraper to collect the top-10 search results from the German verson of Bing
-```
+- Google_de: Scraper to collect search results from the German version Google
+- Bing_de: Scraper to collect search results from the German verson of Bing
+- Google_de_Top10: Scraper to collect the top-10 search results from the German version Google
+- Bing_de_Top10: Scraper to collect the top-10 search results from the German verson of Bing
 
 To use the tool:
-```
-RUN /install/python install_sqlite.py : to install the database
-Create a csv file (e.g. queries.csv) with search queries (one per row)
-RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)
-RUN python start.py or RUN nohup python start.py & : to run a BackgroundScheduler starting the threads to scrape and classify results; check the tool.log for progress
-RUN python check_status.py : to see if the tool is done
-RUN python export_results.py : export classified search results from the database
-RUN python stop.py : you can stop the tool at any point and restrat it with python start.py
-```
-
+- RUN /install/python install_sqlite.py : to install the database
+- Create a csv file (e.g. queries.csv) with search queries (one per row)
+- RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)
+- RUN python start.py or RUN nohup python start.py & : to run a BackgroundScheduler starting the threads to scrape and classify results; check the tool.log for progress
+- RUN python check_status.py : to see if the tool is done
+- RUN python export_results.py : export classified search results from the database
+- RUN python stop.py : you can stop the tool at any point and restrat it with python start.py
 
 ### Der Effekt der Suchmaschinenoptimierung auf die Suchergebnisse von Web-Suchmaschinen: Modellentwicklung, empirische Überprüfung und Triangulation mit Nutzer/innen- und Expert/inneneinschätzungen (SEO-Effekt)
 
