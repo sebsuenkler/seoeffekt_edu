@@ -1,10 +1,11 @@
 ### Installation Guide
-
+```
 git clone https://github.com/searchstudies/seoeffekt_edu
 
 Virtual environment (optional):
 python3 -m venv seoeffekt_edu
 source seoeffekt_edu/bin/activate
+```
 
 Installation:
 
