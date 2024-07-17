@@ -44,6 +44,12 @@ Available Scrapers:
 - RUN python export_results.py : export classified search results from the database
 - RUN python stop.py : you can stop the tool at any point and restrat it with python start.py
 
+#### We also suggest to run the tool on a server in the background:
+An good to way to do it, is running the tool via 
+```
+nohup python start.py >start.out &
+```
+
 ### Der Effekt der Suchmaschinenoptimierung auf die Suchergebnisse von Web-Suchmaschinen: Modellentwicklung, empirische Überprüfung und Triangulation mit Nutzer/innen- und Expert/inneneinschätzungen (SEO-Effekt)
 
 The overall goal of the project is to describe and explain the role of search engine optimization from the perspective of the participating stakeholder groups by analysing search results/search result pages for optimized content as well as quantitative and qualitative surveys of search engine users, search engine optimizers and content providers. Thus the external influence on the results of commercial search engines can be described and quantified for the first time. The project contributes to theory building in information science by extending existing information-seeking models by a component of external influence on the search results.
