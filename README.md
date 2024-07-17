@@ -10,7 +10,7 @@ python3 -m venv seoeffekt_edu
 source seoeffekt_edu/bin/activate
 ```
 
-Installation of the packaged:
+Installation of the packages:
 ```
 pip install -r requirements.txt
 ```
