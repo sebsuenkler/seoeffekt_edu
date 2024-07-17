@@ -167,6 +167,8 @@ def classify_result(source, url, query, result_id):
 
             indicators['loading_time'] = identify_loading_time(url)
 
+    
+
 
             for key, value in indicators.items():
 

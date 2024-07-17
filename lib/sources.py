@@ -1,6 +1,18 @@
-from seleniumwire import webdriver
+import os
+import inspect
 
-from selenium.webdriver.chrome.options import Options
+from pathlib import Path
+
+currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+parentdir = os.path.dirname(currentdir)
+
+
+ext_path = parentdir+"/i_care_about_cookies_unpacked"
+
+from seleniumbase import Driver
+
+import time
 
 
 import time
@@ -11,25 +23,6 @@ current_path = os.path.abspath(os.getcwd())
 import base64
 
 from bs4 import BeautifulSoup
-
-if os.name == "nt":
-    extension_path = current_path+"\i_dont_care_about_cookies-3.4.0.xpi"
-
-else:
-    extension_path = current_path+"/i_dont_care_about_cookies-3.4.0.xpi"
-
-options = Options()
-desired_dpi = 1.0
-options.add_argument("user-agent=Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/74.0.3729.169 Safari/537.36")
-options.add_argument('--no-sandbox')
-options.add_argument("--start-maximized")
-options.add_argument('--disable-dev-shm-usage')
-
-#remove the comment if you want to scrape with the headless browser
-#options.add_argument('--headless=new')
-
-
-options.add_extension(extension_path)
 
 
 def encode_source(source):
@@ -44,12 +37,28 @@ def decode_source(source):
     return source_decoded
 
 def save_source(url):
+    driver = Driver(
+            browser="chrome",
+            wire=True,
+            uc=True,
+            headless2=True,
+            incognito=False,
+            agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            do_not_track=True,
+            undetectable=True,
+            extension_dir=ext_path,
+            locale_code="de",
+            no_sandbox=True,
+            )
+    
+    driver.implicitly_wait(30)
+    driver.set_page_load_timeout(120)
+
     #add error_codes in the future
     source = ""
-    driver = webdriver.Chrome(options=options)
-    driver.set_page_load_timeout(120)
     try:
         driver.get(url)
+        time.sleep(10)
 
     except:
         source = "error"
@@ -57,7 +66,7 @@ def save_source(url):
     if source != "error":
 
         try:
-            time.sleep(10)
+            
             try:
                 driver.execute_script("window.scrollTo(0, document.body.scrollHeight);")
             except:
@@ -77,11 +86,26 @@ def save_source(url):
 
 def save_robot_txt(url):
 
-    driver = webdriver.Chrome(options=options)
+    driver = Driver(
+            browser="chrome",
+            wire=True,
+            uc=True,
+            headless2=True,
+            incognito=False,
+            agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            do_not_track=True,
+            undetectable=True,
+            extension_dir=ext_path,
+            locale_code="de",
+            no_sandbox=True,
+            )    
+
     driver.set_page_load_timeout(30)
+    driver.implicitly_wait(30)
+    
     try:
         driver.get(url)
-        time.sleep(2)
+        time.sleep(5)
         source = driver.page_source
         try:
             source = encode_source(source)
@@ -95,39 +119,24 @@ def save_robot_txt(url):
 
     return source
 
-def calculate_loading_time(url):
-    driver = webdriver.Chrome(options=options)
-    driver.set_page_load_timeout(120)
-    loading_time = -1
-
-    try:
-        driver.get(url)
-        time.sleep(5)
-        ''' Use Navigation Timing  API to calculate the timings that matter the most '''
-        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
-        responseStart = driver.execute_script("return window.performance.timing.responseStart")
-        domComplete = driver.execute_script("return window.performance.timing.domComplete")
-        loadStart = driver.execute_script("return window.performance.timing.domInteractive")
-        EventEnd = driver.execute_script("return window.performance.timing.loadEventEnd")
-        ''' Calculate the performance'''
-        backendPerformance_calc = responseStart - navigationStart
-        frontendPerformance_calc = domComplete - responseStart
-        loadingTime = EventEnd - navigationStart
-        loading_time = loadingTime / 1000
-        driver.quit()
-    except Exception as e:
-        print(str(e))
-        pass
-
-    driver.quit()
-
-    return loading_time
-
-
-
 def get_real_url(url):
-    driver = webdriver.Chrome(options=options)
-    driver.set_page_load_timeout(120)
+
+    driver = Driver(
+            browser="chrome", 
+            wire=True,
+            uc=True,
+            headless2=True,
+            incognito=False,
+            agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            do_not_track=True,
+            undetectable=True,
+            extension_dir=ext_path,
+            locale_code="de",
+            no_sandbox=True,
+            )    
+
+    driver.set_page_load_timeout(30)
+    driver.implicitly_wait(30)
     try:
         driver.get(url)
         time.sleep(4)
@@ -137,3 +146,5 @@ def get_real_url(url):
     except:
         pass
     driver.quit()
+
+

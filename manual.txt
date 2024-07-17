@@ -3,6 +3,11 @@ python3 -m venv seoeffekt_edu
 source seoeffekt_edu/bin/activate
 
 Installation:
+
+pip install -r requirements.txt
+
+Or if you have problems with the packackages, consider to install them manually:
+
 pip install --upgrade pip
 pip install pip-review
 pip-review --local --auto
@@ -13,16 +18,17 @@ pip install apscheduler
 pip install pandas
 pip install beautifulsoup4
 pip install lxml
-pip install -U selenium
+pip install seleniumbase
 
-Fix for issues with Firefox/geckodriver using selenium:
-RUN pip install -U selenium==4.1.0
-RUN wget https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz
-RUN tar -x geckodriver -zf geckodriver-v0.30.0-linux64.tar.gz -O > /usr/local/bin/geckodriver
-RUN chmod +x /usr/local/bin/geckodriver
-RUN rm geckodriver-v0.30.0-linux64.tar.gz
+Available Scrapers:
+Google_de: Scraper to collect search results from the German version Google
+Bing_de: Scraper to collect search results from the German verson of Bing
+Google_de_Top10: Scraper to collect the top-10 search results from the German version Google
+Bing_de_Top10: Scraper to collect the top-10 search results from the German verson of Bing
+
 
 To use the tool:
+MAKE A COPY of seo_effect_empty.db and rename it to seo_effect.db
 RUN /install/python install_sqlite.py : to install the database
 Create a csv file (e.g. queries.csv) with search queries (one per row)
 RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)

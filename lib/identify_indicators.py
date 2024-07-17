@@ -6,7 +6,6 @@ from lxml import html
 from bs4 import BeautifulSoup
 
 from lib.sources import *
-from lib.sources import calculate_loading_time
 
 def match_text(text, pattern):
     text = text.lower()
@@ -461,4 +460,43 @@ def identify_robots_txt(main):
     return result
 
 def identify_loading_time(url):
-    return calculate_loading_time(url)
+
+    driver = Driver(
+            browser="chrome",
+            wire=True,
+            uc=True,
+            headless2=True,
+            incognito=False,
+            agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.0.0 Safari/537.36",
+            do_not_track=True,
+            undetectable=True,
+            extension_dir=ext_path,
+            locale_code="de",
+            no_sandbox=True,
+            )    
+    driver.set_page_load_timeout(120)
+    loading_time = -1
+
+    try:
+        driver.get(url)
+        time.sleep(5)
+        ''' Use Navigation Timing  API to calculate the timings that matter the most '''
+        navigationStart = driver.execute_script("return window.performance.timing.navigationStart")
+        responseStart = driver.execute_script("return window.performance.timing.responseStart")
+        domComplete = driver.execute_script("return window.performance.timing.domComplete")
+        loadStart = driver.execute_script("return window.performance.timing.domInteractive")
+        EventEnd = driver.execute_script("return window.performance.timing.loadEventEnd")
+        ''' Calculate the performance'''
+        backendPerformance_calc = responseStart - navigationStart
+        frontendPerformance_calc = domComplete - responseStart
+        loadingTime = EventEnd - navigationStart
+        loading_time = loadingTime / 1000
+        driver.quit()
+    except Exception as e:
+        print(str(e))
+        pass
+
+    driver.quit()
+
+    return loading_time
+

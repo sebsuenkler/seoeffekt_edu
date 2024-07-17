@@ -1,50 +1,22 @@
 {
-   "Google.com":{
-      "search_engine":"Google.com",
-      "search-box":"q",
-      "max_number_pages":100,
-      "xpath_next_page":"//a[@aria-label='{}']",
-      "search_url":"https://www.google.com/",
-      "xpath_results":"//div[@class='yuRUbf']//a/@href",
-      "max_results_filter":";filter=0",
-      "captcha":"g-recaptcha",
-      "redirect":"false",
-	   "check_pagination":"SJajHc NVbCr"
+   "Google.de":{
+      "search_engine":"Google.de",
+      "scraper_file": "google_de",
+      "limit": 100
    },
-   "Google.com_Example":{
-      "search_engine":"Google.com_Example",
-      "search-box":"q",
-      "max_number_pages":1,
-      "xpath_next_page":"//a[@aria-label='{}']",
-      "search_url":"https://www.google.com/",
-      "xpath_results":"//div[@class='yuRUbf']//a/@href",
-      "max_results_filter":";filter=0",
-      "captcha":"g-recaptcha",
-      "redirect":"false",
-	   "check_pagination":"SJajHc NVbCr"	  
+   "Google.de_Example":{
+      "search_engine":"Google.de_Top10",
+      "scraper_file": "google_de_top10",
+      "limit": 20
    },
-   "Bing.com":{
-     "search_engine":"Bing.com",
-     "search-box":"q",
-     "max_number_pages":30,
-     "xpath_next_page":"//a[@aria-label='{}']",
-     "search_url":"https://www.bing.com/?setlang=en",
-     "xpath_results":"//li[@class='b_algo']//h2/a/@href",
-     "max_results_filter":"check_last_result",
-     "captcha":"g-recaptcha",
-     "redirect":"true",
-     "check_pagination":""	 
+   "Bing.de":{
+      "search_engine":"Bing.de",
+      "scraper_file": "bing_de",
+      "limit": 100
   },
-   "Bing.com_Example":{
-     "search_engine":"Bing.com_Example",
-     "search-box":"q",
-     "max_number_pages":1,
-     "xpath_next_page":"//a[@aria-label='{}']",
-     "search_url":"https://www.bing.com/?setlang=en",
-     "xpath_results":"//li[@class='b_algo']//h2/a/@href",
-     "max_results_filter":"check_last_result",
-     "captcha":"g-recaptcha",
-     "redirect":"true",
-     "check_pagination":""	 
+   "Bing.de_Example":{
+      "search_engine":"Bing.de_Top10",
+      "scraper_file": "bing_de_top10",
+      "limit": 20
    }
 }
