@@ -1,4 +1,5 @@
-### Installation Guide
+### Manual for the tool
+#### Installation
 ```
 git clone https://github.com/searchstudies/seoeffekt_edu
 ```
@@ -34,7 +35,7 @@ Available Scrapers:
 - Google_de_Top10: Scraper to collect the top-10 search results from the German version Google
 - Bing_de_Top10: Scraper to collect the top-10 search results from the German verson of Bing
 
-To use the tool:
+#### Usage
 - RUN /install/python install_sqlite.py : to install the database
 - Create a csv file (e.g. queries.csv) with search queries (one per row)
 - RUN python insert_study.py : to create a new study (type yes to scrape results and select which search engines you want to include)
