@@ -33,7 +33,7 @@ google-auth-oauthlib==1.2.0
 googleapis-common-protos==1.63.0
 grpcio==1.62.2
 grpcio-status==1.62.2
-h11==0.14.0
+h11>=0.16.0
 h2==4.1.0
 hpack==4.0.0
 hyperframe==6.0.1
